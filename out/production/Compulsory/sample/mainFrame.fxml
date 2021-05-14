@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane maxWidth="600.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.PaintController">
+   <top>
+      <HBox prefHeight="59.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+         <children>
+            <Pane prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <Label layoutX="86.0" layoutY="14.0" text="Sides" />
+                  <ChoiceBox fx:id="sidesBox" layoutX="25.0" layoutY="42.0" prefWidth="150.0" />
+                  <Separator layoutX="180.0" layoutY="-2.0" orientation="VERTICAL" prefHeight="113.0" prefWidth="8.0" />
+               </children></Pane>
+            <VBox prefHeight="100.0" prefWidth="206.0">
+               <children>
+                  <Label alignment="CENTER" contentDisplay="CENTER" layoutX="50.0" prefHeight="22.0" prefWidth="209.0" text="Size" textAlignment="CENTER" />
+                  <Slider fx:id="sizeSlide" blockIncrement="1.0" majorTickUnit="1.0" min="1.0" minorTickCount="1" prefHeight="14.0" prefWidth="214.0" showTickLabels="true" snapToTicks="true" value="1.0" />
+                  <Label alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="22.0" prefWidth="209.0" text="Stroke" textAlignment="CENTER">
+                     <VBox.margin>
+                        <Insets top="7.0" />
+                     </VBox.margin>
+                  </Label>
+                  <Slider fx:id="strokeSlide" blockIncrement="1.0" layoutX="10.0" layoutY="32.0" majorTickUnit="1.0" max="5.0" min="1.0" minorTickCount="1" prefHeight="14.0" prefWidth="214.0" showTickLabels="true" snapToTicks="true" value="1.0" />
+               </children>
+            </VBox>
+            <VBox prefHeight="74.0" prefWidth="196.0">
+               <children>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Label alignment="CENTER" prefHeight="39.0" prefWidth="86.0" text="Color" />
+                        <ColorPicker fx:id="colorPicker" prefHeight="38.0" prefWidth="108.0" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+   </top>
+   <bottom>
+      <Pane prefHeight="42.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button layoutX="23.0" layoutY="9.0" mnemonicParsing="false" onAction="#resetBoard" text="Reset" />
+            <Button layoutX="209.0" layoutY="9.0" mnemonicParsing="false" onAction="#saveAction" text="Save" />
+            <Button layoutX="378.0" layoutY="9.0" mnemonicParsing="false" onAction="#loadAction" text="Load" />
+            <Button layoutX="518.0" layoutY="9.0" mnemonicParsing="false" onAction="#exitAction" text="Exit" />
+         </children>
+      </Pane>
+   </bottom>
+   <center>
+      <Pane fx:id="centerPane" maxHeight="449.6" maxWidth="600.0" minHeight="449.6" minWidth="600.0" onMouseClicked="#drawOnClick" prefHeight="449.6" prefWidth="600.0" BorderPane.alignment="CENTER" />
+   </center>
+</BorderPane>
