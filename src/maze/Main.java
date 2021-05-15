@@ -7,8 +7,8 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class Main extends Application {
-    public static final int CANVAS_WIDTH = 600;
-    public static final int CANVAS_HEIGHT = 600;
+    public static final int CANVAS_WIDTH = 800;
+    public static final int CANVAS_HEIGHT = 800;
 
     @Override
     public void start(Stage primaryStage) throws Exception{
