@@ -1,5 +1,6 @@
 package maze;
 
+import javafx.scene.canvas.GraphicsContext;
 import utils.Cell;
 
 import java.util.ArrayList;
@@ -9,10 +10,12 @@ public class Maze {
     protected List<Cell> grid;
     protected int size;
     protected int cellSize;
+    protected GraphicsContext context;
 
-    public Maze(int size, int cellSize) {
+    public Maze(int size, int cellSize, GraphicsContext context) {
         this.size = size;
         this.cellSize = cellSize;
+        this.context = context;
     }
 
     public int getCellSize() {
@@ -43,7 +46,7 @@ public class Maze {
         grid = new ArrayList<>();
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                grid.add(new Cell(i,j));
+                grid.add(new Cell(i, j, cellSize, context));
             }
         }
     }

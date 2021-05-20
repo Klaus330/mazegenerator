@@ -45,7 +45,7 @@ public class GraphicsController implements Initializable {
         graphicsContext.setFill(Color.BLACK);
         graphicsContext.fillRect(0,0,mazeCanvas.getWidth(),mazeCanvas.getHeight());
 
-        Maze maze = new Maze((int)gridSizeSlider.getValue(), (int)mazeCanvas.getWidth()/(int)gridSizeSlider.getValue());
+        Maze maze = new Maze((int)gridSizeSlider.getValue(), (int)mazeCanvas.getWidth()/(int)gridSizeSlider.getValue(), graphicsContext);
         MazeGenerator mazeGenerator = switch (algorithmChoice.getValue()) {
             case "DFS" -> new DFSGenerator(maze, graphicsContext);
             case "Prim" -> new PrimGenerator(maze, graphicsContext);
