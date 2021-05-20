@@ -1,5 +1,6 @@
 package controllers;
 
+import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -16,6 +17,8 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class GraphicsController implements Initializable {
+    public static Timeline timeline;
+
     @FXML
     private Canvas mazeCanvas;
 
@@ -42,6 +45,7 @@ public class GraphicsController implements Initializable {
     @FXML
     private void generateMaze()
     {
+        graphicsContext.clearRect(0,0,mazeCanvas.getWidth(),mazeCanvas.getHeight());
         graphicsContext.setFill(Color.BLACK);
         graphicsContext.fillRect(0,0,mazeCanvas.getWidth(),mazeCanvas.getHeight());
 

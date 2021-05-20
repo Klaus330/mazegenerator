@@ -43,8 +43,8 @@ public class Cell {
 
 
     public void show() {
-        int x0 = this.getX() * size;
-        int y0 = this.getY() * size;
+        int x0 = this.x * size;
+        int y0 = this.y * size;
         if (this.visited) {
             context.setFill(Color.ORANGE);
             context.clearRect(x0, y0, size, size);

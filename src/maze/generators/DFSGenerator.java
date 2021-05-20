@@ -1,15 +1,14 @@
 package maze.generators;
 
+import controllers.GraphicsController;
+import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
-import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.util.Duration;
 import maze.Maze;
-import javafx.scene.paint.Color;
 import utils.Cell;
 
-import java.util.concurrent.TimeUnit;
 
 public class DFSGenerator extends MazeGenerator{
 
@@ -19,19 +18,26 @@ public class DFSGenerator extends MazeGenerator{
 
     @Override
     public void generate() {
+        try {
+            if (GraphicsController.timeline.getStatus().equals(Animation.Status.RUNNING)) {
+                GraphicsController.timeline.stop();
+            }
+        }catch(NullPointerException exception)
+        { }
         initMaze();
 
         this.current.setVisited(true);
-        this.current.show();
         Cell next = this.current.checkNeighbors();
         int index=0;
 
-        Timeline timeline = new Timeline();
+        GraphicsController.timeline = new Timeline();
+
         Duration timePoint = Duration.ZERO ;
         Duration pause = Duration.seconds(0.3);
 
-        KeyFrame initial = new KeyFrame(timePoint, e -> this.current.show());
-        timeline.getKeyFrames().add(initial);
+        Cell finalCurrent = this.current;
+        KeyFrame initial = new KeyFrame(timePoint, e -> finalCurrent.show());
+        GraphicsController.timeline.getKeyFrames().add(initial);
 
         while(next != null)
         {
@@ -45,19 +51,14 @@ public class DFSGenerator extends MazeGenerator{
             Cell finalNext = next;
 
             timePoint = timePoint.add(pause);
-            KeyFrame keyFrame = new KeyFrame(timePoint, e -> {
-                finalNext.show();
-                this.current.show();
-            });
-            timeline.getKeyFrames().add(keyFrame);
-
-
+            KeyFrame keyFrame = new KeyFrame(timePoint, e -> finalNext.show());
+            GraphicsController.timeline.getKeyFrames().add(keyFrame);
 
             // step 4
             this.current = next;
             next = this.current.checkNeighbors();
 
         }
-        timeline.play();
+        GraphicsController.timeline.play();
     }
 }
