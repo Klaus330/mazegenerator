@@ -45,6 +45,11 @@ public class Cell {
     public void show() {
         int x0 = this.getX() * size;
         int y0 = this.getY() * size;
+        if (this.visited) {
+            context.setFill(Color.ORANGE);
+            context.clearRect(x0, y0, size, size);
+            context.fillRect(x0, y0, size, size);
+        }
 
         if (walls[0]) {
             context.strokeLine(x0, y0, x0 + size, y0); // top
@@ -61,12 +66,16 @@ public class Cell {
         if (walls[3]) {
             context.strokeLine(x0, y0 + size, x0, y0); // left
         }
-
-        if (this.visited) {
-            context.setFill(Color.ORANGE);
-            context.fillRect(x0, y0, x0 + size, y0 + size);
-        }
     }
+    public void highlight()
+    {
+        int x0 = this.getX() * size;
+        int y0 = this.getY() * size;
+        context.setFill(Color.GREEN);
+        context.clearRect(x0, y0, size, size);
+        context.fillRect(x0, y0, size, size);
+    }
+
 
     public Cell checkNeighbors() {
         List<Cell> neighbors = new ArrayList<>();
@@ -93,23 +102,21 @@ public class Cell {
         }
 
 
-        if(neighbors.size() > 0){
-            int randomIndex = (int) Math.random() % neighbors.size();
+        if (neighbors.size() > 0) {
+            int randomIndex = (int) (Math.random()*100) % neighbors.size();
             return neighbors.get(randomIndex);
-        }else
-        {
+        } else {
             return null;
         }
     }
 
 
-    public Cell getNeighbor(int index)
-    {
-            if(index == -1){
-                return null;
-            }
+    public Cell getNeighbor(int index) {
+        if (index == -1) {
+            return null;
+        }
 
-            return maze.getGrid().get(index);
+        return maze.getGrid().get(index);
     }
 
 
@@ -146,4 +153,28 @@ public class Cell {
     public void setWalls(boolean[] walls) {
         this.walls = walls;
     }
+
+
+    public void removeWalls(Cell neighbor) {
+        int x = this.x - neighbor.x;
+
+
+        if (x ==  1) {
+            this.walls[3] = false;
+            neighbor.walls[1] = false;
+        } else if (x ==  -1) {
+            this.walls[1] = false;
+            neighbor.walls[3] = false;
+        }
+
+        int y = this.y - neighbor.y;
+        if (y ==  1) {
+            this.walls[0] = false;
+            neighbor.walls[2] = false;
+        } else if (y ==  -1) {
+            this.walls[2] = false;
+            neighbor.walls[0] = false;
+        }
+    }
+
 }
