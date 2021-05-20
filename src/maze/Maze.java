@@ -46,7 +46,7 @@ public class Maze {
         grid = new ArrayList<>();
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                grid.add(new Cell(i, j, cellSize, context));
+                grid.add(new Cell(i, j, cellSize, context, this));
             }
         }
     }

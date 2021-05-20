@@ -1,7 +1,10 @@
 package utils;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
+import maze.Maze;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Cell {
@@ -12,13 +15,14 @@ public class Cell {
     protected boolean[] walls = {true, true, true, true};
     protected boolean visited = false;
 
-    protected Cell previous;
+    protected Maze maze;
 
-    public Cell(int x, int y, int size, GraphicsContext context) {
+    public Cell(int x, int y, int size, GraphicsContext context, Maze maze) {
         this.x = x;
         this.y = y;
         this.size = size;
         this.context = context;
+        this.maze = maze;
     }
 
     public int getX() {
@@ -38,26 +42,108 @@ public class Cell {
     }
 
 
-    public void show(){
-        int x = this.getX()*size;
-        int y = this.getY()*size;
+    public void show() {
+        int x0 = this.getX() * size;
+        int y0 = this.getY() * size;
 
-        if(walls[0]){
-            context.strokeLine(x,y,x+size,y); // top
+        if (walls[0]) {
+            context.strokeLine(x0, y0, x0 + size, y0); // top
         }
 
-        if(walls[1]){
-            context.strokeLine(x+size,y,x+size,y+size); // right
+        if (walls[1]) {
+            context.strokeLine(x0 + size, y0, x0 + size, y0 + size); // right
         }
 
-        if(walls[2]){
-            context.strokeLine(x+size,y+size,x,y+size); // bottom
+        if (walls[2]) {
+            context.strokeLine(x0 + size, y0 + size, x0, y0 + size); // bottom
         }
 
-        if(walls[3]){
-            context.strokeLine(x,y+size,x,y); // left
+        if (walls[3]) {
+            context.strokeLine(x0, y0 + size, x0, y0); // left
+        }
+
+        if (this.visited) {
+            context.setFill(Color.ORANGE);
+            context.fillRect(x0, y0, x0 + size, y0 + size);
+        }
+    }
+
+    public Cell checkNeighbors() {
+        List<Cell> neighbors = new ArrayList<>();
+
+        Cell topNeighbor = getNeighbor(neighborIndex(x, y - 1));
+        Cell rightNeighbor = getNeighbor(neighborIndex(x + 1, y));
+        Cell bottomNeighbor = getNeighbor(neighborIndex(x, y + 1));
+        Cell leftNeighbor = getNeighbor(neighborIndex(x - 1, y));
+
+        if (topNeighbor != null && !topNeighbor.visited) {
+            neighbors.add(topNeighbor);
+        }
+
+        if (rightNeighbor != null && !rightNeighbor.visited) {
+            neighbors.add(rightNeighbor);
+        }
+
+        if (bottomNeighbor != null && !bottomNeighbor.visited) {
+            neighbors.add(bottomNeighbor);
+        }
+
+        if (leftNeighbor != null && !leftNeighbor.visited) {
+            neighbors.add(leftNeighbor);
+        }
+
+
+        if(neighbors.size() > 0){
+            int randomIndex = (int) Math.random() % neighbors.size();
+            return neighbors.get(randomIndex);
+        }else
+        {
+            return null;
         }
     }
 
 
+    public Cell getNeighbor(int index)
+    {
+            if(index == -1){
+                return null;
+            }
+
+            return maze.getGrid().get(index);
+    }
+
+
+    public int neighborIndex(int i, int j) {
+        if (i < 0 || j < 0 || i > maze.getSize() - 1 || j > maze.getSize() - 1) {
+            return -1;
+        }
+        int index = i + (j * maze.getSize());
+        return index;
+    }
+
+
+    public boolean isVisited() {
+        return visited;
+    }
+
+    public void setVisited(boolean visited) {
+        this.visited = visited;
+    }
+
+
+    public int getSize() {
+        return size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
+    }
+
+    public boolean[] getWalls() {
+        return walls;
+    }
+
+    public void setWalls(boolean[] walls) {
+        this.walls = walls;
+    }
 }
