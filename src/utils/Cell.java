@@ -46,6 +46,13 @@ public class Cell {
         int x0 = this.getX() * size;
         int y0 = this.getY() * size;
 
+        System.out.println(this.size);
+
+        if (this.visited) {
+            context.setFill(Color.ORANGE);
+            context.fillRect(x0, y0, size, size);
+        }
+
         if (walls[0]) {
             context.strokeLine(x0, y0, x0 + size, y0); // top
         }
@@ -62,10 +69,7 @@ public class Cell {
             context.strokeLine(x0, y0 + size, x0, y0); // left
         }
 
-        if (this.visited) {
-            context.setFill(Color.ORANGE);
-            context.fillRect(x0, y0, x0 + size, y0 + size);
-        }
+
     }
 
     public Cell checkNeighbors() {
