@@ -45,9 +45,10 @@ public class Cell {
     public void show() {
         int x0 = this.getX() * size;
         int y0 = this.getY() * size;
+
+        System.out.println(this.getX() + " " + this.getY());
         if (this.visited) {
             context.setFill(Color.ORANGE);
-            context.clearRect(x0, y0, size, size);
             context.fillRect(x0, y0, size, size);
         }
 
@@ -67,12 +68,12 @@ public class Cell {
             context.strokeLine(x0, y0 + size, x0, y0); // left
         }
     }
+
     public void highlight()
     {
         int x0 = this.getX() * size;
         int y0 = this.getY() * size;
         context.setFill(Color.GREEN);
-        context.clearRect(x0, y0, size, size);
         context.fillRect(x0, y0, size, size);
     }
 
@@ -162,9 +163,11 @@ public class Cell {
         if (x ==  1) {
             this.walls[3] = false;
             neighbor.walls[1] = false;
+
         } else if (x ==  -1) {
             this.walls[1] = false;
             neighbor.walls[3] = false;
+
         }
 
         int y = this.y - neighbor.y;

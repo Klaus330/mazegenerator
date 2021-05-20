@@ -1,5 +1,6 @@
 package maze.generators;
 
+import javafx.animation.Timeline;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import maze.Maze;
@@ -9,6 +10,7 @@ public abstract class MazeGenerator{
     protected Maze maze;
     protected Cell current;
     protected GraphicsContext context;
+    protected Timeline timeline;
     public MazeGenerator(Maze maze, GraphicsContext context) {
         this.maze = maze;
         this.context = context;

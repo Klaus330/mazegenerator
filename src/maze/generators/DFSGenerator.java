@@ -9,9 +9,13 @@ import maze.Maze;
 import javafx.scene.paint.Color;
 import utils.Cell;
 
+import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
 public class DFSGenerator extends MazeGenerator{
+
+
+
 
     public DFSGenerator(Maze maze, GraphicsContext context) {
         super(maze, context);
@@ -19,19 +23,22 @@ public class DFSGenerator extends MazeGenerator{
 
     @Override
     public void generate() {
+        if(timeline != null){
+            timeline.stop();
+        }
+
         initMaze();
 
         this.current.setVisited(true);
-        this.current.show();
         Cell next = this.current.checkNeighbors();
         int index=0;
 
-        Timeline timeline = new Timeline();
+        timeline = new Timeline();
         Duration timePoint = Duration.ZERO ;
         Duration pause = Duration.seconds(0.3);
 
-        KeyFrame initial = new KeyFrame(timePoint, e -> this.current.show());
-        timeline.getKeyFrames().add(initial);
+//        KeyFrame initial = new KeyFrame(timePoint, e -> this.current.show());
+//        timeline.getKeyFrames().add(initial);
 
         while(next != null)
         {
@@ -42,12 +49,12 @@ public class DFSGenerator extends MazeGenerator{
             // step 3
             this.current.removeWalls(next);
 
+            System.out.println(Arrays.toString(this.current.getWalls()));
             Cell finalNext = next;
 
             timePoint = timePoint.add(pause);
             KeyFrame keyFrame = new KeyFrame(timePoint, e -> {
                 finalNext.show();
-                this.current.show();
             });
             timeline.getKeyFrames().add(keyFrame);
 
