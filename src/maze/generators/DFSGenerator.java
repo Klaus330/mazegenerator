@@ -1,5 +1,6 @@
 package maze.generators;
 
+import controllers.GraphicsController;
 import javafx.animation.KeyFrame;
 import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
@@ -25,8 +26,13 @@ public class DFSGenerator extends MazeGenerator{
 
     @Override
     public void generate() {
-        if(timeline != null){
-            timeline.stop();
+        try {
+            if (GraphicsController.timeline.getStatus().equals(Animation.Status.RUNNING)) {
+                GraphicsController.timeline.stop();
+            }
+        }catch(NullPointerException exception)
+        {
+
         }
         initMaze();
 
