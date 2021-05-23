@@ -24,9 +24,7 @@ public abstract class MazeGenerator{
 
         context.setStroke(Color.WHITE);
 
-        for (Cell cell: maze.getGrid()) {
-            cell.show();
-        }
+        this.displayCells();
         Cell firstCell = maze.getGrid().get(0);
         Cell lastCell = maze.getGrid().get(maze.getGrid().size()-1);
         context.setFill(Color.GREEN);
@@ -35,6 +33,11 @@ public abstract class MazeGenerator{
         context.setFill(Color.PINK);
         context.fillRect(lastCell.getX()*cellSize,lastCell.getY()*cellSize,(lastCell.getX()+1)*cellSize,(lastCell.getY()+1)*cellSize);
 
+    }
+    public void displayCells(){
+        for (Cell cell: maze.getGrid()) {
+            cell.show();
+        }
     }
 
 

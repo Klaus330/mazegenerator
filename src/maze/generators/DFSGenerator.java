@@ -4,9 +4,9 @@ import javafx.animation.KeyFrame;
 import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import maze.Maze;
-import javafx.scene.paint.Color;
 import utils.Cell;
 
 import java.util.Arrays;
@@ -30,46 +30,55 @@ public class DFSGenerator extends MazeGenerator{
         }
         initMaze();
 
-
         timeline = new Timeline();
-        while(!maze.getGrid().parallelStream().allMatch(c -> c.isVisited())){
-            carve();
-            timeline.play();
-        }
-
-
-    }
-
-
-    private void carve()
-    {
-        this.current.setVisited(true);
-        this.current.show();
-
         Duration timePoint = Duration.ZERO ;
-        Duration pause = Duration.seconds(1);
-        Cell next = this.current.checkNeighbors();
-        if(next != null)
-        {
-            // step 1
-            stack.push(current);
+        Duration pause = Duration.seconds(0.2);
+        timePoint = timePoint.add(pause);
+        Cell  finalCurrent = this.current;
+        KeyFrame keyFrame = new KeyFrame(timePoint, e -> {
+            finalCurrent.show();
+        });
+        timeline.getKeyFrames().add(keyFrame);
 
-            // step 3
-            this.current.removeWalls(next);
-            Cell finalNext = next;
+        while(!maze.getGrid().parallelStream().allMatch(c -> c.isVisited())){
+            this.current.setVisited(true);
+            this.current.show();
 
-            timePoint = timePoint.add(pause);
-            KeyFrame keyFrame = new KeyFrame(timePoint, e -> {
-                finalNext.show();
 
-            });
-            timeline.getKeyFrames().add(keyFrame);
-            next.setVisited(true);
+            Cell next = this.current.checkNeighbors();
+            if(next != null)
+            {
+                // step 1
+                stack.push(current);
 
-            // step 4
-            this.current = next;
-        }else if(!stack.isEmpty()){
-            current = stack.pop();
+                // step 3
+                this.current.removeWalls(next);
+                Cell finalNext = next;
+                timePoint = timePoint.add(pause);
+                KeyFrame highlightFrame = new KeyFrame(timePoint, e -> {
+
+                    finalNext.highlight();
+                });
+                timeline.getKeyFrames().add(highlightFrame);
+                timePoint = timePoint.add(pause);
+                KeyFrame showFrame = new KeyFrame(timePoint, e -> {
+
+                    finalNext.show();
+                });
+                timeline.getKeyFrames().add(showFrame);
+                next.setVisited(true);
+                // step 4
+                this.current = next;
+            }else if(!stack.isEmpty()) {
+                current = stack.pop();
+            }
         }
+        this.context.clearRect(0,0,800,800);
+        this.context.setFill(Color.BLACK);
+        this.context.fillRect(0,0,800,800);
+
+        timeline.play();
+
+
     }
 }
