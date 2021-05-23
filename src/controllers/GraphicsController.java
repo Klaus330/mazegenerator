@@ -34,7 +34,7 @@ public class GraphicsController implements Initializable {
         algorithmChoice.setItems(algorithms);
 
         graphicsContext = mazeCanvas.getGraphicsContext2D();
-        graphicsContext.setFill(Color.BLACK);
+        graphicsContext.setFill(Color.rgb(204,204,204));
         graphicsContext.fillRect(0,0,mazeCanvas.getWidth(),mazeCanvas.getHeight());
 
     }

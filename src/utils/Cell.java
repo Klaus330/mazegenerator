@@ -53,18 +53,22 @@ public class Cell {
         }
 
         if (walls[0]) {
+            context.setStroke(Color.BLACK);
             context.strokeLine(x0, y0, x0 + size, y0); // top
         }
 
         if (walls[1]) {
+            context.setStroke(Color.BLACK);
             context.strokeLine(x0 + size, y0, x0 + size, y0 + size); // right
         }
 
         if (walls[2]) {
+            context.setStroke(Color.BLACK);
             context.strokeLine(x0 + size, y0 + size, x0, y0 + size); // bottom
         }
 
         if (walls[3]) {
+            context.setStroke(Color.BLACK);
             context.strokeLine(x0, y0 + size, x0, y0); // left
         }
     }

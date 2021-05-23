@@ -31,7 +31,7 @@ public class DFSGenerator extends MazeGenerator{
         initMaze();
 
         timeline = new Timeline();
-        Duration timePoint = Duration.ZERO ;
+        Duration timePoint = Duration.ZERO;
         Duration pause = Duration.seconds(0.2);
         timePoint = timePoint.add(pause);
         Cell  finalCurrent = this.current;
@@ -44,14 +44,14 @@ public class DFSGenerator extends MazeGenerator{
             this.current.setVisited(true);
             this.current.show();
 
-
+            // step 1: Choose randomly one of the unvisited neighbours
             Cell next = this.current.checkNeighbors();
             if(next != null)
             {
-                // step 1
+                // step 2: Push the current cell to the stack
                 stack.push(current);
 
-                // step 3
+                // step 3: Remove the wall between the current cell and the chosen cell
                 this.current.removeWalls(next);
                 Cell finalNext = next;
                 timePoint = timePoint.add(pause);
@@ -67,18 +67,16 @@ public class DFSGenerator extends MazeGenerator{
                 });
                 timeline.getKeyFrames().add(showFrame);
                 next.setVisited(true);
-                // step 4
+                // step 4: Make the chosen cell the current cell and mark it as visited
                 this.current = next;
             }else if(!stack.isEmpty()) {
                 current = stack.pop();
             }
         }
         this.context.clearRect(0,0,800,800);
-        this.context.setFill(Color.BLACK);
+        this.context.setFill(Color.rgb(204,204,204));
         this.context.fillRect(0,0,800,800);
 
         timeline.play();
-
-
     }
 }
