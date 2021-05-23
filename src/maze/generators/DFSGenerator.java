@@ -10,10 +10,12 @@ import javafx.scene.paint.Color;
 import utils.Cell;
 
 import java.util.Arrays;
+import java.util.Stack;
 import java.util.concurrent.TimeUnit;
 
 public class DFSGenerator extends MazeGenerator{
 
+    protected Stack<Cell> stack = new Stack<>();
 
 
 
@@ -26,45 +28,48 @@ public class DFSGenerator extends MazeGenerator{
         if(timeline != null){
             timeline.stop();
         }
-
         initMaze();
 
-        this.current.setVisited(true);
-        Cell next = this.current.checkNeighbors();
-        int index=0;
 
         timeline = new Timeline();
+        while(!maze.getGrid().parallelStream().allMatch(c -> c.isVisited())){
+            carve();
+            timeline.play();
+        }
+
+
+    }
+
+
+    private void carve()
+    {
+        this.current.setVisited(true);
+        this.current.show();
+
         Duration timePoint = Duration.ZERO ;
-        Duration pause = Duration.seconds(0.3);
-
-//        KeyFrame initial = new KeyFrame(timePoint, e -> this.current.show());
-//        timeline.getKeyFrames().add(initial);
-
-        while(next != null)
+        Duration pause = Duration.seconds(1);
+        Cell next = this.current.checkNeighbors();
+        if(next != null)
         {
-
             // step 1
-            next.setVisited(true);
+            stack.push(current);
 
             // step 3
             this.current.removeWalls(next);
-
-            System.out.println(Arrays.toString(this.current.getWalls()));
             Cell finalNext = next;
 
             timePoint = timePoint.add(pause);
             KeyFrame keyFrame = new KeyFrame(timePoint, e -> {
                 finalNext.show();
+
             });
             timeline.getKeyFrames().add(keyFrame);
-
-
+            next.setVisited(true);
 
             // step 4
             this.current = next;
-            next = this.current.checkNeighbors();
-
+        }else if(!stack.isEmpty()){
+            current = stack.pop();
         }
-        timeline.play();
     }
 }
