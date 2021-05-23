@@ -1,6 +1,7 @@
 package maze.generators;
 
 import controllers.GraphicsController;
+import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
@@ -32,11 +33,11 @@ public class DFSGenerator extends MazeGenerator{
             }
         }catch(NullPointerException exception)
         {
-
+            throw new NullPointerException();
         }
         initMaze();
 
-        timeline = new Timeline();
+        GraphicsController.timeline = new Timeline();
         Duration timePoint = Duration.ZERO;
         Duration pause = Duration.seconds(0.2);
         timePoint = timePoint.add(pause);
@@ -44,7 +45,7 @@ public class DFSGenerator extends MazeGenerator{
         KeyFrame keyFrame = new KeyFrame(timePoint, e -> {
             finalCurrent.show();
         });
-        timeline.getKeyFrames().add(keyFrame);
+        GraphicsController.timeline.getKeyFrames().add(keyFrame);
 
         while(!maze.getGrid().parallelStream().allMatch(c -> c.isVisited())){
             this.current.setVisited(true);
@@ -65,13 +66,13 @@ public class DFSGenerator extends MazeGenerator{
 
                     finalNext.highlight();
                 });
-                timeline.getKeyFrames().add(highlightFrame);
+                GraphicsController.timeline.getKeyFrames().add(highlightFrame);
                 timePoint = timePoint.add(pause);
                 KeyFrame showFrame = new KeyFrame(timePoint, e -> {
 
                     finalNext.show();
                 });
-                timeline.getKeyFrames().add(showFrame);
+                GraphicsController.timeline.getKeyFrames().add(showFrame);
                 next.setVisited(true);
                 // step 4: Make the chosen cell the current cell and mark it as visited
                 this.current = next;
@@ -83,6 +84,6 @@ public class DFSGenerator extends MazeGenerator{
         this.context.setFill(Color.rgb(204,204,204));
         this.context.fillRect(0,0,800,800);
 
-        timeline.play();
+        GraphicsController.timeline.play();
     }
 }

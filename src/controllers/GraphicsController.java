@@ -1,5 +1,6 @@
 package controllers;
 
+import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -26,7 +27,7 @@ public class GraphicsController implements Initializable {
     private Slider gridSizeSlider;
 
     private GraphicsContext graphicsContext;
-
+    public static Timeline timeline;
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         ObservableList<String> algorithms = FXCollections.observableArrayList("DFS","Prim","Kruskal","Wilson");

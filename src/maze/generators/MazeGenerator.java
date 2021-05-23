@@ -10,7 +10,7 @@ public abstract class MazeGenerator{
     protected Maze maze;
     protected Cell current;
     protected GraphicsContext context;
-    protected Timeline timeline;
+
     public MazeGenerator(Maze maze, GraphicsContext context) {
         this.maze = maze;
         this.context = context;
