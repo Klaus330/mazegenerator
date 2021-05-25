@@ -78,6 +78,7 @@ public class Cell {
         int y0 = this.getY() * size;
         context.setFill(Color.GREEN);
         context.fillRect(x0, y0, size, size);
+
     }
 
     public List<Cell> getUnvisitedNeighbours()
