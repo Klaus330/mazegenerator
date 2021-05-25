@@ -3,17 +3,12 @@ package maze.generators;
 import controllers.GraphicsController;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
-import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import maze.Maze;
 import utils.Cell;
-
-import java.util.Arrays;
-import java.util.Stack;
-import java.util.concurrent.TimeUnit;
 
 public class DFSGenerator extends MazeGenerator{
 
@@ -27,12 +22,11 @@ public class DFSGenerator extends MazeGenerator{
             if (GraphicsController.timeline.getStatus().equals(Animation.Status.RUNNING)) {
                 GraphicsController.timeline.stop();
             }
-        }catch(NullPointerException exception)
+        }catch(NullPointerException ignored)
         {
 
         }
         initMaze();
-        System.out.println("HERE");
 
         GraphicsController.timeline = new Timeline();
 
@@ -41,12 +35,10 @@ public class DFSGenerator extends MazeGenerator{
         timePoint = timePoint.add(pause);
 
         Cell  finalCurrent = this.current;
-        KeyFrame keyFrame = new KeyFrame(timePoint, e -> {
-            finalCurrent.show();
-        });
+        KeyFrame keyFrame = new KeyFrame(timePoint, e -> finalCurrent.show());
         GraphicsController.timeline.getKeyFrames().add(keyFrame);
 
-        while(!maze.getGrid().parallelStream().allMatch(c -> c.isVisited())){
+        while(!maze.getGrid().parallelStream().allMatch(Cell::isVisited)){
             this.current.setVisited(true);
             this.current.show();
 
@@ -59,18 +51,11 @@ public class DFSGenerator extends MazeGenerator{
 
                 // step 3: Remove the wall between the current cell and the chosen cell
                 this.current.removeWalls(next);
-                Cell finalNext = next;
                 timePoint = timePoint.add(pause);
-                KeyFrame highlightFrame = new KeyFrame(timePoint, e -> {
-
-                    finalNext.highlight();
-                });
+                KeyFrame highlightFrame = new KeyFrame(timePoint, e -> next.highlight());
                 GraphicsController.timeline.getKeyFrames().add(highlightFrame);
                 timePoint = timePoint.add(pause);
-                KeyFrame showFrame = new KeyFrame(timePoint, e -> {
-
-                    finalNext.show();
-                });
+                KeyFrame showFrame = new KeyFrame(timePoint, e -> next.show());
                 GraphicsController.timeline.getKeyFrames().add(showFrame);
                 next.setVisited(true);
                 // step 4: Make the chosen cell the current cell and mark it as visited
