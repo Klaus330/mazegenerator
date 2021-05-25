@@ -17,10 +17,6 @@ import java.util.concurrent.TimeUnit;
 
 public class DFSGenerator extends MazeGenerator{
 
-    protected Stack<Cell> stack = new Stack<>();
-
-
-
     public DFSGenerator(Maze maze, GraphicsContext context) {
         super(maze, context);
     }
@@ -36,6 +32,7 @@ public class DFSGenerator extends MazeGenerator{
 
         }
         initMaze();
+        System.out.println("HERE");
 
         GraphicsController.timeline = new Timeline();
 

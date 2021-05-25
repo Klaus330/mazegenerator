@@ -1,16 +1,18 @@
 package maze.generators;
 
-import javafx.animation.Timeline;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import maze.Maze;
 import utils.Cell;
+
+import java.util.Stack;
 
 public abstract class MazeGenerator{
     protected Maze maze;
     protected Cell current;
     protected GraphicsContext context;
     protected double drawPause;
+    protected Stack<Cell> stack = new Stack<>();
 
     public MazeGenerator(Maze maze, GraphicsContext context) {
         this.maze = maze;

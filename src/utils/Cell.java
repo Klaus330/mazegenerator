@@ -5,12 +5,14 @@ import javafx.scene.paint.Color;
 import maze.Maze;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Cell {
+    public int size;
     protected int x;
     protected int y;
-    public int size;
+    protected int id;
     protected GraphicsContext context;
     protected boolean[] walls = {true, true, true, true};
     protected boolean visited = false;
@@ -41,12 +43,10 @@ public class Cell {
         this.y = y;
     }
 
-
     public void show() {
         int x0 = this.getX() * size;
         int y0 = this.getY() * size;
 
-        System.out.println(this.getX() + " " + this.getY());
         if (this.visited) {
             context.setFill(Color.ORANGE);
             context.fillRect(x0, y0, size, size);
@@ -73,16 +73,15 @@ public class Cell {
         }
     }
 
-    public void highlight()
-    {
+    public void highlight() {
         int x0 = this.getX() * size;
         int y0 = this.getY() * size;
         context.setFill(Color.GREEN);
         context.fillRect(x0, y0, size, size);
     }
 
-
-    public Cell checkNeighbors() {
+    public List<Cell> getUnvisitedNeighbours()
+    {
         List<Cell> neighbors = new ArrayList<>();
 
         Cell topNeighbor = getNeighbor(neighborIndex(x, y - 1));
@@ -106,15 +105,21 @@ public class Cell {
             neighbors.add(leftNeighbor);
         }
 
+        Collections.shuffle(neighbors);
+        return neighbors;
+    }
+
+
+    public Cell checkNeighbors() {
+        List<Cell> neighbors = getUnvisitedNeighbours();
 
         if (neighbors.size() > 0) {
-            int randomIndex = (int) (Math.random()*100) % neighbors.size();
+            int randomIndex = (int) (Math.random() * 100) % neighbors.size();
             return neighbors.get(randomIndex);
         } else {
             return null;
         }
     }
-
 
     public Cell getNeighbor(int index) {
         if (index == -1) {
@@ -124,15 +129,12 @@ public class Cell {
         return maze.getGrid().get(index);
     }
 
-
     public int neighborIndex(int i, int j) {
         if (i < 0 || j < 0 || i > maze.getSize() - 1 || j > maze.getSize() - 1) {
             return -1;
         }
-        int index = i + (j * maze.getSize());
-        return index;
+        return i + (j * maze.getSize());
     }
-
 
     public boolean isVisited() {
         return visited;
@@ -141,7 +143,6 @@ public class Cell {
     public void setVisited(boolean visited) {
         this.visited = visited;
     }
-
 
     public int getSize() {
         return size;
@@ -159,29 +160,35 @@ public class Cell {
         this.walls = walls;
     }
 
-
     public void removeWalls(Cell neighbor) {
         int x = this.x - neighbor.x;
 
 
-        if (x ==  1) {
+        if (x == 1) {
             this.walls[3] = false;
             neighbor.walls[1] = false;
 
-        } else if (x ==  -1) {
+        } else if (x == -1) {
             this.walls[1] = false;
             neighbor.walls[3] = false;
 
         }
 
         int y = this.y - neighbor.y;
-        if (y ==  1) {
+        if (y == 1) {
             this.walls[0] = false;
             neighbor.walls[2] = false;
-        } else if (y ==  -1) {
+        } else if (y == -1) {
             this.walls[2] = false;
             neighbor.walls[0] = false;
         }
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 }
