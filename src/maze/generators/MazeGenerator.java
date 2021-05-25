@@ -10,6 +10,7 @@ public abstract class MazeGenerator{
     protected Maze maze;
     protected Cell current;
     protected GraphicsContext context;
+    protected double drawPause;
 
     public MazeGenerator(Maze maze, GraphicsContext context) {
         this.maze = maze;
@@ -40,6 +41,10 @@ public abstract class MazeGenerator{
         }
     }
 
+    public void setPause(double pause)
+    {
+        this.drawPause = pause;
+    }
 
     public abstract void generate();
 }

@@ -32,6 +32,8 @@
             <Label layoutX="22.0" layoutY="60.0" text="Algorithm" />
             <ChoiceBox fx:id="algorithmChoice" layoutX="94.0" layoutY="56.0" prefWidth="150.0" />
             <Button fx:id="generateButton" layoutX="643.0" layoutY="56.0" mnemonicParsing="false" onAction="#generateMaze" text="Generate" />
+            <Label layoutX="289.0" layoutY="14.0" text="Speed" />
+            <Slider fx:id="speedSlider" blockIncrement="1.0" layoutX="330.0" layoutY="16.0" majorTickUnit="1.0" max="50.0" min="1.0" minorTickCount="1" showTickMarks="true" snapToTicks="true" value="1.0" />
          </children>
       </Pane>
    </bottom>

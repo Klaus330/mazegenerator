@@ -26,8 +26,13 @@ public class GraphicsController implements Initializable {
     @FXML
     private Slider gridSizeSlider;
 
+    @FXML
+    private Slider speedSlider;
+
+    private double basicPause = 0.5;
     private GraphicsContext graphicsContext;
     public static Timeline timeline;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         ObservableList<String> algorithms = FXCollections.observableArrayList("DFS","Prim","Kruskal","Wilson");
@@ -54,6 +59,7 @@ public class GraphicsController implements Initializable {
             case "Wilson" -> new WilsonGenerator(maze, graphicsContext);
             default -> throw new IllegalStateException("Unexpected value: " + algorithmChoice.getValue());
         };
+        mazeGenerator.setPause(basicPause/speedSlider.getValue());
         mazeGenerator.generate();
     }
 }

@@ -33,14 +33,16 @@ public class DFSGenerator extends MazeGenerator{
             }
         }catch(NullPointerException exception)
         {
-            throw new NullPointerException();
+
         }
         initMaze();
 
         GraphicsController.timeline = new Timeline();
+
         Duration timePoint = Duration.ZERO;
-        Duration pause = Duration.seconds(0.2);
+        Duration pause = Duration.seconds(drawPause);
         timePoint = timePoint.add(pause);
+
         Cell  finalCurrent = this.current;
         KeyFrame keyFrame = new KeyFrame(timePoint, e -> {
             finalCurrent.show();
