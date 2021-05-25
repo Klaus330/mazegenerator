@@ -5,10 +5,15 @@ import javafx.scene.paint.Color;
 import maze.Maze;
 import utils.Cell;
 
+import java.util.Stack;
+
 public abstract class MazeGenerator{
     protected Maze maze;
     protected Cell current;
     protected GraphicsContext context;
+    protected double drawPause;
+    protected Stack<Cell> stack = new Stack<>();
+
     public MazeGenerator(Maze maze, GraphicsContext context) {
         this.maze = maze;
         this.context = context;
@@ -22,9 +27,8 @@ public abstract class MazeGenerator{
 
         context.setStroke(Color.WHITE);
 
-        for (Cell cell: maze.getGrid()) {
-//            cell.show();
-        }
+        this.displayCells();
+
         Cell firstCell = maze.getGrid().get(0);
         Cell lastCell = maze.getGrid().get(maze.getGrid().size()-1);
         context.setFill(Color.GREEN);
@@ -34,7 +38,16 @@ public abstract class MazeGenerator{
         context.fillRect(lastCell.getX()*cellSize+1,lastCell.getY()*cellSize+1,(lastCell.getX()+1)*cellSize-1,(lastCell.getY()+1)*cellSize-1);
 
     }
+    public void displayCells(){
+        for (Cell cell: maze.getGrid()) {
+            cell.show();
+        }
+    }
 
+    public void setPause(double pause)
+    {
+        this.drawPause = pause;
+    }
 
     public abstract void generate();
 }

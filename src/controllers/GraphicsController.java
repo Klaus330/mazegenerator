@@ -1,5 +1,6 @@
 package controllers;
 
+import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -25,7 +26,12 @@ public class GraphicsController implements Initializable {
     @FXML
     private Slider gridSizeSlider;
 
+    @FXML
+    private Slider speedSlider;
+
+    private double basicPause = 0.5;
     private GraphicsContext graphicsContext;
+    public static Timeline timeline;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -34,7 +40,7 @@ public class GraphicsController implements Initializable {
         algorithmChoice.setItems(algorithms);
 
         graphicsContext = mazeCanvas.getGraphicsContext2D();
-        graphicsContext.setFill(Color.BLACK);
+        graphicsContext.setFill(Color.rgb(204,204,204));
         graphicsContext.fillRect(0,0,mazeCanvas.getWidth(),mazeCanvas.getHeight());
 
     }
@@ -53,6 +59,7 @@ public class GraphicsController implements Initializable {
             case "Wilson" -> new WilsonGenerator(maze, graphicsContext);
             default -> throw new IllegalStateException("Unexpected value: " + algorithmChoice.getValue());
         };
+        mazeGenerator.setPause(basicPause/speedSlider.getValue());
         mazeGenerator.generate();
     }
 }
