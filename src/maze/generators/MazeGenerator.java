@@ -5,6 +5,7 @@ import javafx.scene.paint.Color;
 import maze.Maze;
 import utils.Cell;
 
+import java.util.List;
 import java.util.Stack;
 
 public abstract class MazeGenerator{
@@ -13,12 +14,14 @@ public abstract class MazeGenerator{
     protected GraphicsContext context;
     protected double drawPause;
     protected Stack<Cell> stack = new Stack<>();
+    protected List<Cell> grid;
 
     public MazeGenerator(Maze maze, GraphicsContext context) {
         this.maze = maze;
         this.context = context;
         maze.initCells();
         this.current = maze.getGrid().get(0);
+        this.grid = maze.getGrid();
     }
 
     public void initMaze()

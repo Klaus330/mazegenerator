@@ -7,6 +7,7 @@ import maze.Maze;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 public class Cell {
     public int size;
@@ -15,7 +16,8 @@ public class Cell {
     protected int id;
     protected GraphicsContext context;
     protected boolean[] walls = {true, true, true, true};
-    protected boolean visited = false;
+    protected boolean visited;
+    protected boolean inPath;
 
     protected Maze maze;
 
@@ -25,6 +27,8 @@ public class Cell {
         this.size = size;
         this.context = context;
         this.maze = maze;
+        this.visited = false;
+        this.inPath = false;
     }
 
     public int getX() {
@@ -33,6 +37,14 @@ public class Cell {
 
     public void setX(int x) {
         this.x = x;
+    }
+
+    public boolean isInPath() {
+        return inPath;
+    }
+
+    public void setInPath(boolean inPath) {
+        this.inPath = inPath;
     }
 
     public int getY() {
@@ -46,11 +58,11 @@ public class Cell {
     public void show() {
         int x0 = this.getX() * size;
         int y0 = this.getY() * size;
-
-        if (this.visited) {
+//
+//        if (this.visited) {
             context.setFill(Color.ORANGE);
             context.fillRect(x0, y0, size, size);
-        }
+//        }
 
         if (walls[0]) {
             context.setStroke(Color.BLACK);
@@ -81,8 +93,34 @@ public class Cell {
 
     }
 
-    public List<Cell> getUnvisitedNeighbours()
-    {
+    public Cell getNotInPathNeighbour(List<Cell> grid) {
+        List<Cell> neighbors = new ArrayList<>();
+
+        Cell topNeighbor = getNeighbor(neighborIndex(x, y - 1));
+        Cell rightNeighbor = getNeighbor(neighborIndex(x + 1, y));
+        Cell bottomNeighbor = getNeighbor(neighborIndex(x, y + 1));
+        Cell leftNeighbor = getNeighbor(neighborIndex(x - 1, y));
+
+        if (topNeighbor != null && !topNeighbor.isInPath()) {
+            neighbors.add(topNeighbor);
+        }
+
+        if (rightNeighbor != null && !rightNeighbor.isInPath()) {
+            neighbors.add(rightNeighbor);
+        }
+
+        if (bottomNeighbor != null && !bottomNeighbor.isInPath()) {
+            neighbors.add(bottomNeighbor);
+        }
+
+        if (leftNeighbor != null && !leftNeighbor.isInPath()) {
+            neighbors.add(leftNeighbor);
+        }
+
+        return getRandomNeighbour(neighbors);
+    }
+
+    public List<Cell> getUnvisitedNeighbours() {
         List<Cell> neighbors = new ArrayList<>();
 
         Cell topNeighbor = getNeighbor(neighborIndex(x, y - 1));
@@ -110,13 +148,25 @@ public class Cell {
         return neighbors;
     }
 
+    public Cell getRandomNeighbour(List<Cell> neighbours) {
+        if (neighbours.size() > 0) {
+            if(neighbours.size() == 1){
+                return neighbours.get(0);
+            }else {
+                Random random = new Random();
+                int randomIndex = random.nextInt(neighbours.size());
+                return neighbours.get(randomIndex);
+            }
+        }else{
+            return null;
+        }
+    }
 
     public Cell checkNeighbors() {
-        List<Cell> neighbors = getUnvisitedNeighbours();
+        List<Cell> neighbours = getUnvisitedNeighbours();
 
-        if (neighbors.size() > 0) {
-            int randomIndex = (int) (Math.random() * 100) % neighbors.size();
-            return neighbors.get(randomIndex);
+        if (neighbours.size() > 0) {
+            return getRandomNeighbour(neighbours);
         } else {
             return null;
         }

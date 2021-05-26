@@ -35,9 +35,6 @@ public class KruskalGenerator extends MazeGenerator{
         //Initialize the maze
         initMaze();
 
-        //Get the current grid and assign each cell an ID (used later in the algorithm)
-        List<Cell>grid = this.maze.getGrid();
-
         for (int i = 0; i < grid.size(); i++) {
             grid.get(i).setId(i);
             disjointSet.create_set(grid.get(i).getId());
