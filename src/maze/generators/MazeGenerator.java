@@ -1,7 +1,12 @@
 package maze.generators;
 
+import controllers.GraphicsController;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import javafx.util.Duration;
 import maze.Maze;
 import utils.Cell;
 
@@ -16,6 +21,9 @@ public abstract class MazeGenerator{
     protected Stack<Cell> stack = new Stack<>();
     protected List<Cell> grid;
 
+    Duration timePoint;
+    Duration pause;
+
     public MazeGenerator(Maze maze, GraphicsContext context) {
         this.maze = maze;
         this.context = context;
@@ -24,27 +32,55 @@ public abstract class MazeGenerator{
         this.grid = maze.getGrid();
     }
 
-    public void initMaze()
+    public void setup()
     {
-        int cellSize = maze.getCellSize();
+        //Used for stopping another animation that is running
+        try {
+            if (GraphicsController.timeline.getStatus().equals(Animation.Status.RUNNING)) {
+                GraphicsController.timeline.stop();
+            }
+        }catch(NullPointerException exception)
+        {
+            throw new NullPointerException();
+        }
 
-        context.setStroke(Color.WHITE);
-
-        this.displayCells();
-
-        Cell firstCell = maze.getGrid().get(0);
-        Cell lastCell = maze.getGrid().get(maze.getGrid().size()-1);
-        context.setFill(Color.GREEN);
-        context.fillRect(0+1,0+1,(firstCell.getX()+1)*cellSize-1,(firstCell.getY()+1)*cellSize-1);
-
-        context.setFill(Color.PINK);
-        context.fillRect(lastCell.getX()*cellSize+1,lastCell.getY()*cellSize+1,(lastCell.getX()+1)*cellSize-1,(lastCell.getY()+1)*cellSize-1);
+        GraphicsController.timeline = new Timeline();
+        timePoint = Duration.ZERO;
+        pause = Duration.seconds(drawPause);
 
     }
+
     public void displayCells(){
         for (Cell cell: maze.getGrid()) {
             cell.show();
         }
+    }
+
+    public KeyFrame showKeyFrame(Cell cell)
+    {
+        timePoint = timePoint.add(pause);
+        return new KeyFrame(timePoint, e -> cell.show());
+    }
+
+    public KeyFrame highlightKeyFrame(Cell cell)
+    {
+        timePoint = timePoint.add(pause);
+        return new KeyFrame(timePoint, e -> cell.highlight());
+    }
+
+    public void addKeyFrame(KeyFrame frame)
+    {
+        GraphicsController.timeline.getKeyFrames().add(frame);
+    }
+
+
+    public void play()
+    {
+        this.context.clearRect(0,0,800,800);
+        this.context.setFill(Color.rgb(204,204,204));
+        this.context.fillRect(0,0,800,800);
+
+        GraphicsController.timeline.play();
     }
 
     public void setPause(double pause)

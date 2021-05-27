@@ -23,16 +23,7 @@ public class WilsonGenerator extends MazeGenerator {
 
     @Override
     public void generate() {
-        //Used for stopping another animation that is running
-        try {
-            if (GraphicsController.timeline.getStatus().equals(Animation.Status.RUNNING)) {
-                GraphicsController.timeline.stop();
-            }
-        } catch (NullPointerException ignored) {
-        }
-
-        //Initialize the maze
-        initMaze();
+        setup();
 
         //Use a Random class in order to get a random starting Cell
         random = new Random();

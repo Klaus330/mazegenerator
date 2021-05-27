@@ -31,6 +31,7 @@ public class GraphicsController implements Initializable {
 
     private double basicPause = 0.5;
     private GraphicsContext graphicsContext;
+
     public static Timeline timeline;
 
     @Override
@@ -42,7 +43,7 @@ public class GraphicsController implements Initializable {
         graphicsContext = mazeCanvas.getGraphicsContext2D();
         graphicsContext.setFill(Color.rgb(204,204,204));
         graphicsContext.fillRect(0,0,mazeCanvas.getWidth(),mazeCanvas.getHeight());
-
+        timeline = new Timeline();
     }
 
     @FXML
