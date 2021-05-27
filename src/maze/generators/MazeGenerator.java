@@ -18,7 +18,7 @@ public abstract class MazeGenerator{
     protected Cell current;
     protected GraphicsContext context;
     protected double drawPause;
-    protected Stack<Cell> stack = new Stack<>();
+    protected Stack<Cell> stack;
     protected List<Cell> grid;
 
     Duration timePoint;
@@ -48,6 +48,7 @@ public abstract class MazeGenerator{
         timePoint = Duration.ZERO;
         pause = Duration.seconds(drawPause);
 
+        stack = new Stack<>();
     }
 
     public void displayCells(){
@@ -66,6 +67,12 @@ public abstract class MazeGenerator{
     {
         timePoint = timePoint.add(pause);
         return new KeyFrame(timePoint, e -> cell.highlight());
+    }
+
+    public KeyFrame inPathFrame(Cell cell)
+    {
+        timePoint = timePoint.add(pause);
+        return new KeyFrame(timePoint, e -> cell.drawInPath());
     }
 
     public void addKeyFrame(KeyFrame frame)

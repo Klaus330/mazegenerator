@@ -55,14 +55,10 @@ public class Cell {
         this.y = y;
     }
 
-    public void show() {
+    public void drawWalls()
+    {
         int x0 = this.getX() * size;
         int y0 = this.getY() * size;
-//
-//        if (this.visited) {
-            context.setFill(Color.ORANGE);
-            context.fillRect(x0, y0, size, size);
-//        }
 
         if (walls[0]) {
             context.setStroke(Color.BLACK);
@@ -85,12 +81,33 @@ public class Cell {
         }
     }
 
+    public void show() {
+        int x0 = this.getX() * size;
+        int y0 = this.getY() * size;
+
+        if (this.visited) {
+            context.setFill(Color.ORANGE);
+            context.fillRect(x0, y0, size, size);
+        }
+
+        drawWalls();
+    }
+
     public void highlight() {
         int x0 = this.getX() * size;
         int y0 = this.getY() * size;
         context.setFill(Color.GREEN);
         context.fillRect(x0, y0, size, size);
+    }
 
+    public void drawInPath() {
+        int x0 = this.getX() * size;
+        int y0 = this.getY() * size;
+
+        context.setFill(Color.PURPLE);
+        context.fillRect(x0, y0, size, size);
+
+        drawWalls();
     }
 
     public Cell getNotInPathNeighbour(List<Cell> grid) {

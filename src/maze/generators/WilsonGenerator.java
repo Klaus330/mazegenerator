@@ -10,13 +10,14 @@ import javafx.util.Duration;
 import maze.Maze;
 import utils.Cell;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
 public class WilsonGenerator extends MazeGenerator {
     private Random random;
-
+    private List<Cell>cellsInPath = new ArrayList<>();
     public WilsonGenerator(Maze maze, GraphicsContext graphicsContext) {
         super(maze, graphicsContext);
     }
@@ -24,7 +25,6 @@ public class WilsonGenerator extends MazeGenerator {
     @Override
     public void generate() {
         setup();
-
         //Use a Random class in order to get a random starting Cell
         random = new Random();
 
@@ -35,47 +35,28 @@ public class WilsonGenerator extends MazeGenerator {
         //Choose another random Cell
         this.current = grid.get(random.nextInt(grid.size()));
 
-        //Initialize the animation ( timeline )
-        GraphicsController.timeline = new Timeline();
-
-        Duration timePoint = Duration.ZERO;
-        Duration pause = Duration.seconds(drawPause);
-        timePoint = timePoint.add(pause);
-
         //Add the initial stage to the animation
         Cell finalStart = this.current;
-        KeyFrame keyFrame = new KeyFrame(timePoint, e -> finalStart.show());
-        GraphicsController.timeline.getKeyFrames().add(keyFrame);
+        addKeyFrame(showKeyFrame(finalStart));
 
         //While there exists at least one unvisited cell
         while (!grid.parallelStream().allMatch(Cell::isVisited)) {
-            System.out.println(this.current.getX() + " " + this.current.getY());
-            carve();
-            System.out.println(this.current.getX() + " " + this.current.getY());
-            System.out.println("----------");
-            Cell finalCurrent = this.current;
-            timePoint = timePoint.add(pause);
-            KeyFrame highlightFrame = new KeyFrame(timePoint, e -> finalCurrent.highlight());
-            GraphicsController.timeline.getKeyFrames().add(highlightFrame);
 
-            //Display the progress
-            timePoint = timePoint.add(pause);
-            KeyFrame showFrame = new KeyFrame(timePoint, e -> finalCurrent.show());
-            GraphicsController.timeline.getKeyFrames().add(showFrame);
+            carve();
+            addKeyFrame(highlightKeyFrame(this.current));
+            addKeyFrame(inPathFrame(this.current));
         }
 
-        //Clear the display
-        this.context.clearRect(0,0,800,800);
-        this.context.setFill(Color.rgb(204,204,204));
-        this.context.fillRect(0,0,800,800);
-
         //Start the animation
-        GraphicsController.timeline.play();
+        addKeyFrame(showKeyFrame(this.current));
+        play();
     }
 
     public void carve() {
         if (this.current.isVisited()) {
             addPathToMaze();
+
+            addKeyFrame(showKeyFrame(this.current));
 
             //Get all the cells not visited
             List<Cell> notInMaze = grid.parallelStream().filter(c -> !c.isVisited()).collect(Collectors.toList());
@@ -85,14 +66,16 @@ public class WilsonGenerator extends MazeGenerator {
                 //Pick a random cell not in the maze to be the this.current one
                 this.current = notInMaze.get(random.nextInt(notInMaze.size()));
             }else{
+
                 return;
             }
         }
         this.current.setInPath(true);
+        cellsInPath.add(this.current);
         Cell nextCell = this.current.getNotInPathNeighbour(grid);
         if(nextCell != null)
         {
-            stack.push(this.current);
+            stack.addElement(this.current);
             this.current.removeWalls(nextCell);
             this.current = nextCell;
         }else if(!stack.isEmpty())
@@ -103,15 +86,22 @@ public class WilsonGenerator extends MazeGenerator {
             {
                 e.printStackTrace();
             }
+        }else{
+            this.current.setVisited(true);
         }
     }
 
     private void addPathToMaze() {
         //Iterate through all the cells that are in path and mark them as visited
-        this.grid.parallelStream().filter(Cell::isInPath).forEach(c -> {
-            c.setVisited(true);
-            c.setInPath(false);
-        });
+        for(Cell c:cellsInPath){
+            int index = this.grid.indexOf(c);
+
+            addKeyFrame(showKeyFrame(this.grid.get(index)));
+            this.grid.get(index).setVisited(true);
+            this.grid.get(index).setInPath(false);
+        };
+
         stack.clear();
+        cellsInPath.clear();
     }
 }

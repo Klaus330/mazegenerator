@@ -56,7 +56,6 @@ public class DFSGenerator extends MazeGenerator {
     public void showProgress(Cell next)
     {
         addKeyFrame(highlightKeyFrame(next));
-
         addKeyFrame(showKeyFrame(next));
     }
 }
