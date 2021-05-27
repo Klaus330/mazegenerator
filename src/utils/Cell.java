@@ -5,7 +5,6 @@ import javafx.scene.paint.Color;
 import maze.Maze;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class Cell {
@@ -79,35 +78,6 @@ public class Cell {
         context.setFill(Color.GREEN);
         context.fillRect(x0, y0, size, size);
 
-    }
-
-    public List<Cell> getUnvisitedNeighbours()
-    {
-        List<Cell> neighbors = new ArrayList<>();
-
-        Cell topNeighbor = getNeighbor(neighborIndex(x, y - 1));
-        Cell rightNeighbor = getNeighbor(neighborIndex(x + 1, y));
-        Cell bottomNeighbor = getNeighbor(neighborIndex(x, y + 1));
-        Cell leftNeighbor = getNeighbor(neighborIndex(x - 1, y));
-
-        if (topNeighbor != null && !topNeighbor.visited) {
-            neighbors.add(topNeighbor);
-        }
-
-        if (rightNeighbor != null && !rightNeighbor.visited) {
-            neighbors.add(rightNeighbor);
-        }
-
-        if (bottomNeighbor != null && !bottomNeighbor.visited) {
-            neighbors.add(bottomNeighbor);
-        }
-
-        if (leftNeighbor != null && !leftNeighbor.visited) {
-            neighbors.add(leftNeighbor);
-        }
-
-        Collections.shuffle(neighbors);
-        return neighbors;
     }
 
 
@@ -191,5 +161,79 @@ public class Cell {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public List<Cell> getUnvisitedNeighbours() {
+        List<Cell> neighbors = new ArrayList<>();
+
+        Cell topNeighbor = getNeighbor(neighborIndex(x, y - 1));
+        Cell rightNeighbor = getNeighbor(neighborIndex(x + 1, y));
+        Cell bottomNeighbor = getNeighbor(neighborIndex(x, y + 1));
+        Cell leftNeighbor = getNeighbor(neighborIndex(x - 1, y));
+
+        if (topNeighbor != null && !topNeighbor.visited) {
+            neighbors.add(topNeighbor);
+        }
+
+        if (rightNeighbor != null && !rightNeighbor.visited) {
+            neighbors.add(rightNeighbor);
+        }
+
+        if (bottomNeighbor != null && !bottomNeighbor.visited) {
+            neighbors.add(bottomNeighbor);
+        }
+
+        if (leftNeighbor != null && !leftNeighbor.visited) {
+            neighbors.add(leftNeighbor);
+        }
+
+        return neighbors;
+    }
+
+    public List<Cell> getAllNeigbours() {
+        List<Cell> neighbors = new ArrayList<>();
+
+        Cell topNeighbor = getNeighbor(neighborIndex(x, y - 1));
+        Cell rightNeighbor = getNeighbor(neighborIndex(x + 1, y));
+        Cell bottomNeighbor = getNeighbor(neighborIndex(x, y + 1));
+        Cell leftNeighbor = getNeighbor(neighborIndex(x - 1, y));
+
+        neighbors.add(topNeighbor);
+        neighbors.add(rightNeighbor);
+        neighbors.add(bottomNeighbor);
+        neighbors.add(leftNeighbor);
+
+        return neighbors;
+    }
+
+
+    public List<Cell> getAllVisitedNeighbours()
+    {
+        List<Cell> allVisitedNeighbours = new ArrayList<>();
+
+
+        Cell topNeighbor = getNeighbor(neighborIndex(x, y - 1));
+        Cell rightNeighbor = getNeighbor(neighborIndex(x + 1, y));
+        Cell bottomNeighbor = getNeighbor(neighborIndex(x, y + 1));
+        Cell leftNeighbor = getNeighbor(neighborIndex(x - 1, y));
+
+        if (topNeighbor != null && topNeighbor.visited) {
+            allVisitedNeighbours.add(topNeighbor);
+        }
+
+        if (rightNeighbor != null && rightNeighbor.visited) {
+            allVisitedNeighbours.add(rightNeighbor);
+        }
+
+        if (bottomNeighbor != null && bottomNeighbor.visited) {
+            allVisitedNeighbours.add(bottomNeighbor);
+        }
+
+        if (leftNeighbor != null && leftNeighbor.visited) {
+            allVisitedNeighbours.add(leftNeighbor);
+        }
+
+
+        return allVisitedNeighbours;
     }
 }
