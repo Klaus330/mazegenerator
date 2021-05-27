@@ -9,7 +9,7 @@ public class WilsonGenerator extends MazeGenerator {
     }
     @Override
     public void generate() {
-        initMaze();
+        setup();
 
     }
 }
