@@ -28,7 +28,7 @@
       <Pane prefHeight="120.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
             <Label layoutX="27.0" layoutY="14.0" text="GridSize" />
-            <Slider fx:id="gridSizeSlider" blockIncrement="2.0" layoutX="94.0" layoutY="15.0" majorTickUnit="2.0" max="40.0" min="2.0" minorTickCount="2" prefHeight="14.0" prefWidth="146.0" showTickMarks="true" snapToTicks="true" value="8.0" />
+            <Slider fx:id="gridSizeSlider" blockIncrement="2.0" layoutX="96.0" layoutY="11.0" majorTickUnit="1.0" max="40.0" min="8.0" minorTickCount="1" prefHeight="14.0" prefWidth="146.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="8.0" />
             <Label layoutX="22.0" layoutY="60.0" text="Algorithm" />
             <ChoiceBox fx:id="algorithmChoice" layoutX="94.0" layoutY="56.0" prefWidth="150.0" />
             <Button fx:id="generateButton" layoutX="643.0" layoutY="56.0" mnemonicParsing="false" onAction="#generateMaze" text="Generate" />
