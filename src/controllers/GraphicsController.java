@@ -3,16 +3,25 @@ package controllers;
 import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Slider;
+import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import maze.Maze;
 import maze.generators.*;
 
+import javax.imageio.ImageIO;
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -29,6 +38,15 @@ public class GraphicsController implements Initializable {
     @FXML
     private Slider speedSlider;
 
+    @FXML
+    private Button solveButton;
+
+    @FXML
+    private Button exportButton;
+
+    @FXML
+    private ChoiceBox<String> solveChoice;
+
     private double basicPause = 0.5;
     private GraphicsContext graphicsContext;
 
@@ -39,6 +57,10 @@ public class GraphicsController implements Initializable {
         ObservableList<String> algorithms = FXCollections.observableArrayList("DFS","Prim","Kruskal","Wilson","BinaryTree");
         algorithmChoice.setValue("DFS");
         algorithmChoice.setItems(algorithms);
+
+        ObservableList<String> solvers = FXCollections.observableArrayList("DFS","Dijkstra");
+        solveChoice.setValue("DFS");
+        solveChoice.setItems(solvers);
 
         graphicsContext = mazeCanvas.getGraphicsContext2D();
         graphicsContext.setFill(Color.rgb(204,204,204));
@@ -76,5 +98,24 @@ public class GraphicsController implements Initializable {
         };
         mazeGenerator.setPause(basicPause/speedSlider.getValue());
         mazeGenerator.generate();
+    }
+
+    @FXML
+    private void saveAction() {
+        WritableImage screenshot = mazeCanvas.snapshot(new SnapshotParameters(), null);
+
+        FileChooser fileChooser = new FileChooser();
+        FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter("PNG files (*.png)", "*.png");
+        fileChooser.getExtensionFilters().add(extensionFilter);
+
+        File toSaveFile = fileChooser.showSaveDialog(new Stage());
+
+        try {
+            if (toSaveFile != null) {
+                ImageIO.write(SwingFXUtils.fromFXImage(screenshot, null), "png", toSaveFile);
+            }
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
     }
 }

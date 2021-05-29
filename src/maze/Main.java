@@ -15,6 +15,7 @@ public class Main extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
         primaryStage.setTitle("Maze Generator");
         primaryStage.setScene(new Scene(root, CANVAS_WIDTH,CANVAS_HEIGHT));
+        primaryStage.setResizable(false);
         primaryStage.show();
     }
 
