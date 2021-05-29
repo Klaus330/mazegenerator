@@ -36,7 +36,7 @@ public class GraphicsController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        ObservableList<String> algorithms = FXCollections.observableArrayList("DFS","Prim","Kruskal","Wilson");
+        ObservableList<String> algorithms = FXCollections.observableArrayList("DFS","Prim","Kruskal","Wilson","BinaryTree");
         algorithmChoice.setValue("DFS");
         algorithmChoice.setItems(algorithms);
 
@@ -58,6 +58,7 @@ public class GraphicsController implements Initializable {
             case "Prim" -> new PrimGenerator(maze, graphicsContext);
             case "Kruskal" -> new KruskalGenerator(maze, graphicsContext);
             case "Wilson" -> new WilsonGenerator(maze, graphicsContext);
+            case "BinaryTree" -> new BinaryTreeGenerator(maze, graphicsContext);
             default -> throw new IllegalStateException("Unexpected value: " + algorithmChoice.getValue());
         };
         mazeGenerator.setPause(basicPause/speedSlider.getValue());

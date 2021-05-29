@@ -262,7 +262,7 @@ public class Cell {
         return neighbors;
     }
 
-    public List<Cell> getAllNeigbours() {
+    public List<Cell> getAllNeighbours() {
         List<Cell> neighbors = new ArrayList<>();
 
         Cell topNeighbor = getNeighbor(neighborIndex(x, y - 1));
@@ -270,10 +270,10 @@ public class Cell {
         Cell bottomNeighbor = getNeighbor(neighborIndex(x, y + 1));
         Cell leftNeighbor = getNeighbor(neighborIndex(x - 1, y));
 
-        neighbors.add(topNeighbor);
-        neighbors.add(rightNeighbor);
-        neighbors.add(bottomNeighbor);
-        neighbors.add(leftNeighbor);
+        if(topNeighbor != null )neighbors.add(topNeighbor);
+        if(rightNeighbor != null )neighbors.add(rightNeighbor);
+        if(bottomNeighbor != null )neighbors.add(bottomNeighbor);
+        if(leftNeighbor != null )neighbors.add(leftNeighbor);
 
         return neighbors;
     }
