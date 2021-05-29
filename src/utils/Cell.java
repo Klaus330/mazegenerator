@@ -19,6 +19,8 @@ public class Cell {
     protected boolean visited;
     protected boolean inPath;
 
+    protected boolean isDeadEnd;
+
     protected Maze maze;
 
     public Cell(int x, int y, int size, GraphicsContext context, Maze maze) {
@@ -29,6 +31,16 @@ public class Cell {
         this.maze = maze;
         this.visited = false;
         this.inPath = false;
+        this.isDeadEnd = false;
+    }
+
+
+    public boolean isDeadEnd() {
+        return isDeadEnd;
+    }
+
+    public void setDeadEnd(boolean deadEnd) {
+        isDeadEnd = deadEnd;
     }
 
     public int getX() {
@@ -55,8 +67,7 @@ public class Cell {
         this.y = y;
     }
 
-    public void drawWalls()
-    {
+    public void drawWalls() {
         int x0 = this.getX() * size;
         int y0 = this.getY() * size;
 
@@ -100,6 +111,14 @@ public class Cell {
         context.fillRect(x0, y0, size, size);
     }
 
+    public void deadEnd() {
+        int x0 = this.getX() * size;
+        int y0 = this.getY() * size;
+        context.setFill(Color.RED);
+        context.fillRect(x0, y0, size, size);
+        drawWalls();
+    }
+
     public void drawInPath() {
         int x0 = this.getX() * size;
         int y0 = this.getY() * size;
@@ -140,14 +159,14 @@ public class Cell {
 
     public Cell getRandomNeighbour(List<Cell> neighbours) {
         if (neighbours.size() > 0) {
-            if(neighbours.size() == 1){
+            if (neighbours.size() == 1) {
                 return neighbours.get(0);
-            }else {
+            } else {
                 Random random = new Random();
                 int randomIndex = random.nextInt(neighbours.size());
                 return neighbours.get(randomIndex);
             }
-        }else{
+        } else {
             return null;
         }
     }
@@ -270,19 +289,17 @@ public class Cell {
         Cell bottomNeighbor = getNeighbor(neighborIndex(x, y + 1));
         Cell leftNeighbor = getNeighbor(neighborIndex(x - 1, y));
 
-        if(topNeighbor != null )neighbors.add(topNeighbor);
-        if(rightNeighbor != null )neighbors.add(rightNeighbor);
-        if(bottomNeighbor != null )neighbors.add(bottomNeighbor);
-        if(leftNeighbor != null )neighbors.add(leftNeighbor);
+        if (topNeighbor != null) neighbors.add(topNeighbor);
+        if (rightNeighbor != null) neighbors.add(rightNeighbor);
+        if (bottomNeighbor != null) neighbors.add(bottomNeighbor);
+        if (leftNeighbor != null) neighbors.add(leftNeighbor);
 
         return neighbors;
     }
 
 
-    public List<Cell> getAllVisitedNeighbours()
-    {
+    public List<Cell> getAllVisitedNeighbours() {
         List<Cell> allVisitedNeighbours = new ArrayList<>();
-
 
         Cell topNeighbor = getNeighbor(neighborIndex(x, y - 1));
         Cell rightNeighbor = getNeighbor(neighborIndex(x + 1, y));
@@ -307,5 +324,29 @@ public class Cell {
 
 
         return allVisitedNeighbours;
+    }
+
+    public Cell getPathNeighbour() {
+        List<Cell> neighbors = new ArrayList<>();
+
+        Cell topNeighbor = getNeighbor(neighborIndex(x, y - 1));
+        Cell rightNeighbor = getNeighbor(neighborIndex(x + 1, y));
+        Cell bottomNeighbor = getNeighbor(neighborIndex(x, y + 1));
+        Cell leftNeighbor = getNeighbor(neighborIndex(x - 1, y));
+
+        if (topNeighbor != null && !topNeighbor.isDeadEnd() && !topNeighbor.walls[0]) {
+            neighbors.add(topNeighbor);
+        }
+        if (rightNeighbor != null && !rightNeighbor.isDeadEnd() && !rightNeighbor.walls[1]) {
+            neighbors.add(rightNeighbor);
+        }
+        if (bottomNeighbor != null && !bottomNeighbor.isDeadEnd() && !bottomNeighbor.walls[2]) {
+            neighbors.add(bottomNeighbor);
+        }
+        if (leftNeighbor != null && !leftNeighbor.isDeadEnd() && !leftNeighbor.walls[3]) {
+            neighbors.add(leftNeighbor);
+        }
+
+        return getRandomNeighbour(neighbors);
     }
 }

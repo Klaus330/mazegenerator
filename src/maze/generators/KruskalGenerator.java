@@ -1,12 +1,6 @@
 package maze.generators;
 
-import controllers.GraphicsController;
-import javafx.animation.Animation;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
-import javafx.util.Duration;
 import utils.DisjointSet;
 import maze.Maze;
 import utils.Cell;

@@ -1,4 +1,4 @@
-package maze.generators;
+package maze.solvers;
 
 import controllers.GraphicsController;
 import javafx.animation.Animation;
@@ -13,21 +13,21 @@ import utils.Cell;
 import java.util.List;
 import java.util.Stack;
 
-public abstract class MazeGenerator{
+public abstract class Solver {
     protected Maze maze;
+    private GraphicsContext context;
     protected Cell current;
-    protected GraphicsContext context;
-    protected double drawPause;
-    protected Stack<Cell> stack;
     protected List<Cell> grid;
+    protected double drawPause;
+
+    Stack<Cell>stack;
 
     Duration timePoint;
     Duration pause;
 
-    public MazeGenerator(Maze maze, GraphicsContext context) {
-        this.maze = maze;
+    public Solver(Maze maze, GraphicsContext context) {
+        this.maze = GraphicsController.maze;
         this.context = context;
-        maze.initCells();
         this.current = maze.getGrid().get(0);
         this.grid = maze.getGrid();
     }
@@ -51,16 +51,10 @@ public abstract class MazeGenerator{
         stack = new Stack<>();
     }
 
-    public void displayCells(){
-        for (Cell cell: maze.getGrid()) {
-            cell.show();
-        }
-    }
-
-    public KeyFrame showKeyFrame(Cell cell)
+    public KeyFrame deadEndFrame(Cell cell)
     {
         timePoint = timePoint.add(pause);
-        return new KeyFrame(timePoint, e -> cell.show());
+        return new KeyFrame(timePoint, e -> cell.deadEnd());
     }
 
     public KeyFrame highlightKeyFrame(Cell cell)
@@ -80,15 +74,9 @@ public abstract class MazeGenerator{
         GraphicsController.timeline.getKeyFrames().add(frame);
     }
 
-
     public void play()
     {
-        this.context.clearRect(0,0,800,800);
-        this.context.setFill(Color.rgb(204,204,204));
-        this.context.fillRect(0,0,800,800);
-
         GraphicsController.timeline.play();
-        GraphicsController.maze = maze;
     }
 
     public void setPause(double pause)
@@ -96,5 +84,5 @@ public abstract class MazeGenerator{
         this.drawPause = pause;
     }
 
-    public abstract void generate();
+    public abstract void solve();
 }

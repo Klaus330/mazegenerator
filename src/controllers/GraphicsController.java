@@ -18,6 +18,9 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import maze.Maze;
 import maze.generators.*;
+import maze.solvers.DFSSolver;
+import maze.solvers.DijkstraSolver;
+import maze.solvers.Solver;
 
 import javax.imageio.ImageIO;
 import java.io.File;
@@ -46,6 +49,9 @@ public class GraphicsController implements Initializable {
 
     @FXML
     private ChoiceBox<String> solveChoice;
+
+    static public Maze maze;
+    private Solver solver;
 
     private double basicPause = 0.5;
     private GraphicsContext graphicsContext;
@@ -87,7 +93,7 @@ public class GraphicsController implements Initializable {
             }
         }
 
-        Maze maze = new Maze(mazeSize, (int)mazeCanvas.getWidth()/mazeSize, graphicsContext);
+        maze = new Maze(mazeSize, (int)mazeCanvas.getWidth()/mazeSize, graphicsContext);
         MazeGenerator mazeGenerator = switch (algorithmChoice.getValue()) {
             case "DFS" -> new DFSGenerator(maze, graphicsContext);
             case "Prim" -> new PrimGenerator(maze, graphicsContext);
@@ -98,6 +104,18 @@ public class GraphicsController implements Initializable {
         };
         mazeGenerator.setPause(basicPause/speedSlider.getValue());
         mazeGenerator.generate();
+    }
+
+    @FXML
+    private void solveMaze()
+    {
+        Solver solver = switch (solveChoice.getValue()){
+            case "DFS" -> new DFSSolver(maze,graphicsContext);
+            case "Dijkstra" -> new DijkstraSolver(maze,graphicsContext);
+            default -> throw new IllegalStateException("Unexpected value: " + solveChoice.getValue());
+        };
+        solver.setPause(basicPause/speedSlider.getValue());
+        solver.solve();
     }
 
     @FXML
