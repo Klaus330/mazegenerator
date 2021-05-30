@@ -76,6 +76,10 @@ public abstract class Solver {
 
     public void play()
     {
+        timePoint = timePoint.add(Duration.ZERO);
+        GraphicsController.timeline.getKeyFrames().add(new KeyFrame(timePoint, e -> GraphicsController.isSolved = true));
+        GraphicsController.timeline.getKeyFrames().add(new KeyFrame(timePoint, e -> GraphicsController.isSolving = false));
+
         GraphicsController.timeline.play();
     }
 

@@ -11,10 +11,9 @@ public class DFSSolver extends Solver {
 
     public void solve() {
         setup();
-        Cell lastCell = grid.get(grid.size() - 1);
 
         this.current = grid.get(0);
-        while (this.current != grid.get(grid.size()-1)) {
+        while (!this.current.equals(grid.get(grid.size()-1))) {
             path();
         }
         getSolution();
@@ -33,7 +32,8 @@ public class DFSSolver extends Solver {
         } else if (!stack.isEmpty()) {
             try {
                 this.current = stack.pop();
-            } catch (Exception ignore) {
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }
@@ -42,7 +42,7 @@ public class DFSSolver extends Solver {
         while (!stack.isEmpty()) {
             try {
                 Cell solutionCell = stack.pop();
-                solutionCell.setInPath(true);
+                solutionCell.setInPathSolve(true);
                 addKeyFrame(inPathFrame(solutionCell));
             } catch (Exception ignore) {
             }

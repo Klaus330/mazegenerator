@@ -87,6 +87,11 @@ public abstract class MazeGenerator{
         this.context.setFill(Color.rgb(204,204,204));
         this.context.fillRect(0,0,800,800);
 
+        timePoint = timePoint.add(Duration.ZERO);
+        GraphicsController.timeline.getKeyFrames().add(new KeyFrame(timePoint, e -> GraphicsController.isGenerated = true));
+        GraphicsController.timeline.getKeyFrames().add(new KeyFrame(timePoint, e -> GraphicsController.isGenerating = false));
+        GraphicsController.timeline.getKeyFrames().add(new KeyFrame(timePoint, e -> GraphicsController.isSolved = false));
+
         GraphicsController.timeline.play();
         GraphicsController.maze = maze;
     }

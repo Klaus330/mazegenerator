@@ -18,6 +18,7 @@ public class Cell {
     protected boolean[] walls = {true, true, true, true};
     protected boolean visited;
     protected boolean inPath;
+    protected boolean inPathSolve;
 
     protected boolean isDeadEnd;
 
@@ -31,6 +32,7 @@ public class Cell {
         this.maze = maze;
         this.visited = false;
         this.inPath = false;
+        this.inPathSolve = false;
         this.isDeadEnd = false;
     }
 
@@ -57,6 +59,14 @@ public class Cell {
 
     public void setInPath(boolean inPath) {
         this.inPath = inPath;
+    }
+
+    public boolean isInPathSolve() {
+        return inPathSolve;
+    }
+
+    public void setInPathSolve(boolean inPathSolve) {
+        this.inPathSolve = inPathSolve;
     }
 
     public int getY() {
@@ -334,16 +344,16 @@ public class Cell {
         Cell bottomNeighbor = getNeighbor(neighborIndex(x, y + 1));
         Cell leftNeighbor = getNeighbor(neighborIndex(x - 1, y));
 
-        if (topNeighbor != null && !topNeighbor.isDeadEnd() && !topNeighbor.walls[0]) {
+        if (topNeighbor != null && !topNeighbor.isDeadEnd() && !this.walls[0]) {
             neighbors.add(topNeighbor);
         }
-        if (rightNeighbor != null && !rightNeighbor.isDeadEnd() && !rightNeighbor.walls[1]) {
+        if (rightNeighbor != null && !rightNeighbor.isDeadEnd() && !this.walls[1]) {
             neighbors.add(rightNeighbor);
         }
-        if (bottomNeighbor != null && !bottomNeighbor.isDeadEnd() && !bottomNeighbor.walls[2]) {
+        if (bottomNeighbor != null && !bottomNeighbor.isDeadEnd() && !this.walls[2]) {
             neighbors.add(bottomNeighbor);
         }
-        if (leftNeighbor != null && !leftNeighbor.isDeadEnd() && !leftNeighbor.walls[3]) {
+        if (leftNeighbor != null && !leftNeighbor.isDeadEnd() && !this.walls[3]) {
             neighbors.add(leftNeighbor);
         }
 
