@@ -16,6 +16,7 @@ public class DFSSolver extends Solver {
         while (!this.current.equals(grid.get(grid.size()-1))) {
             path();
         }
+        stack.push(grid.get(grid.size()-1));
         getSolution();
         play();
     }
@@ -27,7 +28,7 @@ public class DFSSolver extends Solver {
         Cell nextCell = this.current.getPathNeighbour();
 
         if (nextCell != null) {
-            stack.push(nextCell);
+            stack.push(this.current);
             this.current = nextCell;
         } else if (!stack.isEmpty()) {
             try {
