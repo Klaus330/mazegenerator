@@ -8,12 +8,12 @@ import java.util.List;
 import java.util.Random;
 
 public class BinaryTreeGenerator extends MazeGenerator{
-    private Random random;
+    private final Random randomChoice;
     private int index;
 
     public BinaryTreeGenerator(Maze maze, GraphicsContext context) {
         super(maze, context);
-        random = new Random();
+        randomChoice = new Random();
     }
 
     @Override
@@ -24,10 +24,9 @@ public class BinaryTreeGenerator extends MazeGenerator{
         this.current = this.grid.get(index);
 
         //Add the initial stage to the animation
-        Cell finalStart = this.current;
-        addKeyFrame(showKeyFrame(finalStart));
+        addKeyFrame(showKeyFrame(this.current));
 
-        while(!grid.parallelStream().allMatch(Cell::isVisited))
+        while(generationNotFinished())
         {
             carve();
         }
@@ -42,7 +41,7 @@ public class BinaryTreeGenerator extends MazeGenerator{
 
         if(top != null && left != null)
         {
-            carveDirection(random.nextInt(2));
+            carveDirection(randomChoice.nextInt(2));
         }else if(top != null){
             carveDirection(0);
         }else{
@@ -54,8 +53,19 @@ public class BinaryTreeGenerator extends MazeGenerator{
 
         if(index-1 >= 0)
         {
-            this.current = grid.get(--index);
+            index--;
+            this.current = grid.get(index);
         }
+    }
+
+    public boolean isTopNeighbour(Cell neighbour)
+    {
+        return neighbour.getY() + 1 == this.current.getY();
+    }
+
+    public boolean isLeftNeighbour(Cell neighbour)
+    {
+        return neighbour.getX() + 1 == this.current.getX();
     }
 
     public void carveDirection(int direction)
@@ -65,7 +75,7 @@ public class BinaryTreeGenerator extends MazeGenerator{
         {
             for(Cell neighbour:neighbours)
             {
-                if(neighbour.getY() + 1 == this.current.getY())
+                if(isTopNeighbour(neighbour))
                 {
                     this.current.removeWalls(neighbour);
                 }
@@ -73,7 +83,7 @@ public class BinaryTreeGenerator extends MazeGenerator{
         }else{
             for(Cell neighbour:neighbours)
             {
-                if(neighbour.getX() + 1 == this.current.getX())
+                if(isLeftNeighbour(neighbour))
                 {
                     this.current.removeWalls(neighbour);
                 }

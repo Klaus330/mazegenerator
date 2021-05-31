@@ -1,28 +1,23 @@
 package maze.generators;
 
 import controllers.GraphicsController;
-import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import maze.Maze;
 import utils.Cell;
+import utils.Drawable;
 
 import java.util.List;
 import java.util.Stack;
 
-public abstract class MazeGenerator{
+public abstract class MazeGenerator extends Drawable {
     protected Maze maze;
     protected Cell current;
     protected GraphicsContext context;
-    protected double drawPause;
     protected Stack<Cell> stack;
     protected List<Cell> grid;
-
-    Duration timePoint;
-    Duration pause;
 
     public MazeGenerator(Maze maze, GraphicsContext context) {
         this.maze = maze;
@@ -34,52 +29,9 @@ public abstract class MazeGenerator{
 
     public void setup()
     {
-        //Used for stopping another animation that is running
-        try {
-            if (GraphicsController.timeline.getStatus().equals(Animation.Status.RUNNING)) {
-                GraphicsController.timeline.stop();
-            }
-        }catch(NullPointerException exception)
-        {
-            throw new NullPointerException();
-        }
-
-        GraphicsController.timeline = new Timeline();
-        timePoint = Duration.ZERO;
-        pause = Duration.seconds(drawPause);
-
+        super.setup();
         stack = new Stack<>();
     }
-
-    public void displayCells(){
-        for (Cell cell: maze.getGrid()) {
-            cell.show();
-        }
-    }
-
-    public KeyFrame showKeyFrame(Cell cell)
-    {
-        timePoint = timePoint.add(pause);
-        return new KeyFrame(timePoint, e -> cell.show());
-    }
-
-    public KeyFrame highlightKeyFrame(Cell cell)
-    {
-        timePoint = timePoint.add(pause);
-        return new KeyFrame(timePoint, e -> cell.highlight());
-    }
-
-    public KeyFrame inPathFrame(Cell cell)
-    {
-        timePoint = timePoint.add(pause);
-        return new KeyFrame(timePoint, e -> cell.drawInPath());
-    }
-
-    public void addKeyFrame(KeyFrame frame)
-    {
-        GraphicsController.timeline.getKeyFrames().add(frame);
-    }
-
 
     public void play()
     {
@@ -96,10 +48,9 @@ public abstract class MazeGenerator{
         GraphicsController.maze = maze;
     }
 
-    public void setPause(double pause)
-    {
-        this.drawPause = pause;
-    }
-
     public abstract void generate();
+
+    public boolean generationNotFinished() {
+        return (!maze.getGrid().parallelStream().allMatch(Cell::isVisited));
+    }
 }

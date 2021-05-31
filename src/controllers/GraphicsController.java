@@ -62,7 +62,7 @@ public class GraphicsController implements Initializable {
 
     private Solver solver;
 
-    private final double basicPause = 0.5;
+    private static final double BASIC_PAUSE = 0.5;
     private GraphicsContext graphicsContext;
 
     public static Timeline timeline;
@@ -83,12 +83,8 @@ public class GraphicsController implements Initializable {
         timeline = new Timeline();
     }
 
-    @FXML
-    private void generateMaze()
+    private int calculateMazeSize()
     {
-        graphicsContext.setFill(Color.BLACK);
-        graphicsContext.fillRect(0,0,mazeCanvas.getWidth(),mazeCanvas.getHeight());
-
         int mazeSize = (int)gridSizeSlider.getValue();
         if(mazeCanvas.getWidth() % mazeSize != 0)
         {
@@ -101,7 +97,13 @@ public class GraphicsController implements Initializable {
                 }
             }
         }
+        return mazeSize;
+    }
 
+    @FXML
+    private void generateMaze()
+    {
+        int mazeSize = calculateMazeSize();
         maze = new Maze(mazeSize, (int)mazeCanvas.getWidth()/mazeSize, graphicsContext);
         MazeGenerator mazeGenerator = switch (algorithmChoice.getValue()) {
             case "DFS" -> new DFSGenerator(maze, graphicsContext);
@@ -111,7 +113,7 @@ public class GraphicsController implements Initializable {
             case "BinaryTree" -> new BinaryTreeGenerator(maze, graphicsContext);
             default -> throw new IllegalStateException("Unexpected value: " + algorithmChoice.getValue());
         };
-        mazeGenerator.setPause(basicPause/speedSlider.getValue());
+        mazeGenerator.setPause(BASIC_PAUSE /speedSlider.getValue());
 
         isGenerating = true;
         isGenerated = false;
@@ -122,14 +124,13 @@ public class GraphicsController implements Initializable {
     @FXML
     private void solveMaze()
     {
-        System.out.println(isGenerated + " " + isSolving + " " + isSolved);
         if(isGenerated && !isSolving && !isSolved) {
             Solver solver = switch (solveChoice.getValue()) {
-                case "DFS" -> new DFSSolver(maze, graphicsContext);
-                case "Dijkstra" -> new DijkstraSolver(maze, graphicsContext);
+                case "DFS" -> new DFSSolver(maze);
+                case "Dijkstra" -> new DijkstraSolver(maze);
                 default -> throw new IllegalStateException("Unexpected value: " + solveChoice.getValue());
             };
-            solver.setPause(basicPause / speedSlider.getValue());
+            solver.setPause(BASIC_PAUSE / speedSlider.getValue());
 
             isSolving = true;
             isSolved = false;
@@ -140,12 +141,13 @@ public class GraphicsController implements Initializable {
     @FXML
     private void resetSolver()
     {
-        maze.unSolve();
-        for(Cell cell: maze.getGrid())
-        {
-            cell.show();
+        if(!isSolving && !isGenerating) {
+            maze.unSolve();
+            for (Cell cell : maze.getGrid()) {
+                cell.show();
+            }
+            isSolved = false;
         }
-        isSolved = false;
     }
 
     @FXML

@@ -1,6 +1,5 @@
 package maze.solvers;
 
-import javafx.scene.canvas.GraphicsContext;
 import maze.Maze;
 import utils.Cell;
 
@@ -12,8 +11,8 @@ import java.util.Queue;
 public class DijkstraSolver extends Solver{
     private final Queue<Cell> queue;
 
-    public DijkstraSolver(Maze maze, GraphicsContext context) {
-        super(maze, context);
+    public DijkstraSolver(Maze maze) {
+        super(maze);
         queue = new PriorityQueue<>(new DistanceComparator());
     }
 
@@ -24,16 +23,16 @@ public class DijkstraSolver extends Solver{
         this.current.setDistance(0);
 
         queue.offer(this.current);
-        while(!solutionFound())
+        while(solutionNotFound())
         {
-            path();
+            findPath();
         }
 
         getSolution();
         play();
     }
 
-    private void path()
+    protected void findPath()
     {
         this.current.setDeadEnd(true);
         addKeyFrame(deadEndFrame(this.current));
@@ -51,7 +50,7 @@ public class DijkstraSolver extends Solver{
         }
     }
 
-    private void getSolution()
+    protected void getSolution()
     {
         while(this.current != grid.get(0))
         {
@@ -59,6 +58,7 @@ public class DijkstraSolver extends Solver{
             addKeyFrame(inPathFrame(this.current));
             this.current = current.getParent();
         }
+        addKeyFrame(inPathFrame(grid.get(0)));
     }
 
     private class DistanceComparator implements Comparator<Cell> {

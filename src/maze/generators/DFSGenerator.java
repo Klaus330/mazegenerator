@@ -15,18 +15,14 @@ public class DFSGenerator extends MazeGenerator {
     public void generate() {
         setup();
 
-        Cell finalCurrent = this.current;
-        addKeyFrame(showKeyFrame(finalCurrent));
+        addKeyFrame(showKeyFrame(this.current));
 
-        while (!generationFinished()) {
+        while (generationNotFinished()) {
             carve();
         }
         play();
     }
 
-    public boolean generationFinished() {
-        return (maze.getGrid().parallelStream().allMatch(Cell::isVisited));
-    }
 
     public void carve() {
         this.current.setVisited(true);
@@ -40,9 +36,8 @@ public class DFSGenerator extends MazeGenerator {
 
             // step 3: Remove the wall between the current cell and the chosen cell
             this.current.removeWalls(next);
-            Cell finalNext = next;
 
-            showProgress(finalNext);
+            showProgress(next);
 
             next.setVisited(true);
             // step 4: Make the chosen cell the current cell and mark it as visited

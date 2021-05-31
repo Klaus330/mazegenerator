@@ -6,48 +6,49 @@ import utils.Cell;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class PrimGenerator extends MazeGenerator {
-    private final List<Cell> frontier = new ArrayList<Cell>();
+    private final List<Cell> boundaries = new ArrayList<>();
+    private final Random randomChoice;
 
     public PrimGenerator(Maze maze, GraphicsContext graphicsContext) {
         super(maze, graphicsContext);
+        randomChoice = new Random();
     }
     @Override
     public void generate() {
         setup();
-        while(!generationFinished()) {
+        while(generationNotFinished()) {
             carve();
         }
         play();
     }
 
-    public boolean generationFinished(){
-        return (maze.getGrid().parallelStream().allMatch(Cell::isVisited));
-    }
-
     public void carve(){
         this.current.setVisited(true);
-        Cell finalCurrent = this.current;
-        List<Cell> neighbors = current.getUnvisitedNeighbours();
-        frontier.addAll(neighbors);
-        int randomNeighbourIndex = (int) (Math.random()*100) % frontier.size();
+        Cell lastCurrent = this.current;
 
-        this.current = frontier.get(randomNeighbourIndex);
+        List<Cell> neighbors = current.getUnvisitedNeighbours();
+        boundaries.addAll(neighbors);
+
+        int randomNeighbourIndex = randomChoice.nextInt(boundaries.size());
+
+        this.current = boundaries.get(randomNeighbourIndex);
 
         List<Cell> newNeighbors = current.getVisitedNeighbours();
 
         if (!newNeighbors.isEmpty()) {
-            int randomIndex = (int) (Math.random()*100) % newNeighbors.size();
-            Cell finalNext = newNeighbors.get(randomIndex);
+            int randomIndex = randomChoice.nextInt(newNeighbors.size());
+            Cell next = newNeighbors.get(randomIndex);
 
-            current.removeWalls(finalNext);
-            finalNext.setVisited(true);
+            current.removeWalls(next);
+            next.setVisited(true);
 
-            showProgress(finalCurrent, finalNext);
+            showProgress(lastCurrent, next);
         }
 
-        frontier.removeIf(Cell::isVisited);
+        boundaries.removeIf(Cell::isVisited);
     }
 
 

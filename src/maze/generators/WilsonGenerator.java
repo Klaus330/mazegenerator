@@ -1,12 +1,6 @@
 package maze.generators;
 
-import controllers.GraphicsController;
-import javafx.animation.Animation;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
-import javafx.util.Duration;
 import maze.Maze;
 import utils.Cell;
 
@@ -16,8 +10,9 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 public class WilsonGenerator extends MazeGenerator {
-    private Random random;
-    private List<Cell>cellsInPath = new ArrayList<>();
+    private Random randomChoice;
+    private final List<Cell>cellsInPath = new ArrayList<>();
+    
     public WilsonGenerator(Maze maze, GraphicsContext graphicsContext) {
         super(maze, graphicsContext);
     }
@@ -26,21 +21,20 @@ public class WilsonGenerator extends MazeGenerator {
     public void generate() {
         setup();
         //Use a Random class in order to get a random starting Cell
-        random = new Random();
+        randomChoice = new Random();
 
         //Mark the first chosen Cell as visited
-        this.current = grid.get(random.nextInt(grid.size()));
+        this.current = grid.get(randomChoice.nextInt(grid.size()));
         this.current.setVisited(true);
 
         //Choose another random Cell
-        this.current = grid.get(random.nextInt(grid.size()));
+        this.current = grid.get(randomChoice.nextInt(grid.size()));
 
         //Add the initial stage to the animation
-        Cell finalStart = this.current;
-        addKeyFrame(showKeyFrame(finalStart));
+        addKeyFrame(showKeyFrame(this.current));
 
         //While there exists at least one unvisited cell
-        while (!grid.parallelStream().allMatch(Cell::isVisited)) {
+        while (generationNotFinished()) {
 
             carve();
             addKeyFrame(highlightKeyFrame(this.current));
@@ -59,12 +53,12 @@ public class WilsonGenerator extends MazeGenerator {
             addKeyFrame(showKeyFrame(this.current));
 
             //Get all the cells not visited
-            List<Cell> notInMaze = grid.parallelStream().filter(c -> !c.isVisited()).collect(Collectors.toList());
+            List<Cell> notSelectedYet = grid.parallelStream().filter(c -> !c.isVisited()).collect(Collectors.toList());
 
-            if(!notInMaze.isEmpty())
+            if(!notSelectedYet.isEmpty())
             {
                 //Pick a random cell not in the maze to be the this.current one
-                this.current = notInMaze.get(random.nextInt(notInMaze.size()));
+                this.current = notSelectedYet.get(randomChoice.nextInt(notSelectedYet.size()));
             }else{
 
                 return;
@@ -72,6 +66,7 @@ public class WilsonGenerator extends MazeGenerator {
         }
         this.current.setInPath(true);
         cellsInPath.add(this.current);
+        
         Cell nextCell = this.current.getNotInPathNeighbour(grid);
         if(nextCell != null)
         {
@@ -99,7 +94,7 @@ public class WilsonGenerator extends MazeGenerator {
             addKeyFrame(showKeyFrame(this.grid.get(index)));
             this.grid.get(index).setVisited(true);
             this.grid.get(index).setInPath(false);
-        };
+        }
 
         stack.clear();
         cellsInPath.clear();

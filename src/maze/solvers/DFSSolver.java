@@ -1,27 +1,28 @@
 package maze.solvers;
 
-import javafx.scene.canvas.GraphicsContext;
 import maze.Maze;
 import utils.Cell;
 
 public class DFSSolver extends Solver {
-    public DFSSolver(Maze maze, GraphicsContext context) {
-        super(maze, context);
+    public DFSSolver(Maze maze) {
+        super(maze);
     }
 
     public void solve() {
         setup();
 
         this.current = grid.get(0);
-        while (!solutionFound()) {
-            path();
+        while (solutionNotFound()) {
+            findPath();
         }
+
         stack.push(grid.get(grid.size()-1));
+
         getSolution();
         play();
     }
 
-    private void path() {
+    protected void findPath() {
         this.current.setDeadEnd(true);
         addKeyFrame(deadEndFrame(this.current));
 
@@ -39,7 +40,7 @@ public class DFSSolver extends Solver {
         }
     }
 
-    private void getSolution() {
+    protected void getSolution() {
         while (!stack.isEmpty()) {
             try {
                 Cell solutionCell = stack.pop();

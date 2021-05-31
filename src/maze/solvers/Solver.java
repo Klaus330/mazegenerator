@@ -1,77 +1,32 @@
 package maze.solvers;
 
 import controllers.GraphicsController;
-import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import maze.Maze;
 import utils.Cell;
+import utils.Drawable;
 
 import java.util.List;
 import java.util.Stack;
 
-public abstract class Solver {
+public abstract class Solver extends Drawable {
     protected Maze maze;
-    private GraphicsContext context;
     protected Cell current;
     protected List<Cell> grid;
-    protected double drawPause;
 
     Stack<Cell>stack;
 
-    Duration timePoint;
-    Duration pause;
-
-    public Solver(Maze maze, GraphicsContext context) {
+    public Solver(Maze maze) {
         this.maze = GraphicsController.maze;
-        this.context = context;
         this.current = maze.getGrid().get(0);
         this.grid = maze.getGrid();
     }
 
     public void setup()
     {
-        //Used for stopping another animation that is running
-        try {
-            if (GraphicsController.timeline.getStatus().equals(Animation.Status.RUNNING)) {
-                GraphicsController.timeline.stop();
-            }
-        }catch(NullPointerException exception)
-        {
-            throw new NullPointerException();
-        }
-
-        GraphicsController.timeline = new Timeline();
-        timePoint = Duration.ZERO;
-        pause = Duration.seconds(drawPause);
-
+        super.setup();
         stack = new Stack<>();
-    }
-
-    public KeyFrame deadEndFrame(Cell cell)
-    {
-        timePoint = timePoint.add(pause);
-        return new KeyFrame(timePoint, e -> cell.deadEnd());
-    }
-
-    public KeyFrame highlightKeyFrame(Cell cell)
-    {
-        timePoint = timePoint.add(pause);
-        return new KeyFrame(timePoint, e -> cell.highlight());
-    }
-
-    public KeyFrame inPathFrame(Cell cell)
-    {
-        timePoint = timePoint.add(pause);
-        return new KeyFrame(timePoint, e -> cell.drawInPath());
-    }
-
-    public void addKeyFrame(KeyFrame frame)
-    {
-        GraphicsController.timeline.getKeyFrames().add(frame);
     }
 
     public void play()
@@ -83,14 +38,13 @@ public abstract class Solver {
         GraphicsController.timeline.play();
     }
 
-    protected boolean solutionFound() {
-        return this.current.equals(grid.get(grid.size() - 1));
-    }
-
-    public void setPause(double pause)
-    {
-        this.drawPause = pause;
+    protected boolean solutionNotFound() {
+        return !this.current.equals(grid.get(grid.size() - 1));
     }
 
     public abstract void solve();
+
+    protected abstract void findPath();
+
+    protected abstract void getSolution();
 }

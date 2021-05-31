@@ -29,16 +29,14 @@ public class KruskalGenerator extends MazeGenerator{
         stack.addAll(grid);
 
         //Add the initial stage to the animation
-        Cell finalStart = this.current;
-        addKeyFrame(showKeyFrame(finalStart));
+        addKeyFrame(showKeyFrame(this.current));
 
-        while(!grid.parallelStream().allMatch(Cell::isVisited))
+        while(generationNotFinished())
         {
             //Carve the walls
             carve();
 
-            Cell finalCurrent = this.current;
-            showProgress(finalCurrent);
+            showProgress(this.current);
         }
 
        play();
