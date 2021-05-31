@@ -17,51 +17,52 @@ public class DisjointSet{
     }
 
     //Create disjoint sets containing only an element
-    public void create_set(int element) {
-        Map<Integer, Set<Integer>> map = new HashMap<>();
-        Set<Integer> set = new HashSet<>();
+    public void createSet(int element) {
+        Map<Integer, Set<Integer>> correspondingTree = new HashMap<>();
+        Set<Integer> tree = new HashSet<>();
 
-        set.add(element);
-        map.put(element, set);
+        tree.add(element);
+        correspondingTree.put(element, tree);
 
-        disjointSet.add(map);
+        disjointSet.add(correspondingTree);
     }
 
     //Make the union between two sets, each containing one of the given elements
     public void union(int first, int second) {
 
-        int first_rep = find_set(first);
-        int second_rep = find_set(second);
+        int firstIndex = findSet(first);
+        int secondIndex = findSet(second);
 
-        Set<Integer> first_set = null;
-        Set<Integer> second_set = null;
+        Set<Integer> firstForest = null;
+        Set<Integer> secondForest = null;
 
         for (Map<Integer, Set<Integer>> map : disjointSet) {
-            if (map.containsKey(first_rep)) {
-                first_set = map.get(first_rep);
-            } else if (map.containsKey(second_rep)) {
-                second_set = map.get(second_rep);
+            if (map.containsKey(firstIndex)) {
+                firstForest = map.get(firstIndex);
+            } else if (map.containsKey(secondIndex)) {
+                secondForest = map.get(secondIndex);
             }
         }
 
-        if (first_set != null && second_set != null)
-            first_set.addAll(second_set);
+        if (firstForest != null && secondForest != null) {
+            firstForest.addAll(secondForest);
+        }
 
         for (int index = 0; index < disjointSet.size(); index++) {
 
             Map<Integer, Set<Integer>> map = disjointSet.get(index);
 
-            if (map.containsKey(first_rep)) {
-                map.put(first_rep, first_set);
-            } else if (map.containsKey(second_rep)) {
-                map.remove(second_rep);
+            if (map.containsKey(firstIndex)) {
+                map.put(firstIndex, firstForest);
+            } else if (map.containsKey(secondIndex)) {
+                map.remove(secondIndex);
                 disjointSet.remove(index);
             }
         }
     }
 
     //Find the set the element is belonging to
-    public int find_set(int element) {
+    public int findSet(int element) {
 
         for (Map<Integer, Set<Integer>> map : disjointSet) {
             Set<Integer> keySet = map.keySet();

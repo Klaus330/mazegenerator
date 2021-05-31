@@ -23,7 +23,7 @@ public class KruskalGenerator extends MazeGenerator{
 
         for (int i = 0; i < grid.size(); i++) {
             grid.get(i).setId(i);
-            disjointSet.create_set(grid.get(i).getId());
+            disjointSet.createSet(grid.get(i).getId());
         }
 
         stack.addAll(grid);
@@ -51,7 +51,7 @@ public class KruskalGenerator extends MazeGenerator{
         List<Cell> neighbours = this.current.getUnvisitedNeighbours();
 
         for (Cell next : neighbours) {
-            if (disjointSet.find_set(this.current.getId()) != disjointSet.find_set(next.getId())) {
+            if (disjointSet.findSet(this.current.getId()) != disjointSet.findSet(next.getId())) {
                 this.current.removeWalls(next);
 
                 disjointSet.union(this.current.getId(), next.getId());

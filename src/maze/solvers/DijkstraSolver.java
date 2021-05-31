@@ -39,14 +39,14 @@ public class DijkstraSolver extends Solver{
         addKeyFrame(deadEndFrame(this.current));
         this.current = queue.poll();
 
-        List<Cell> neighbours = this.current.getAccessibleNeighbours();
-        for(Cell neighbour:neighbours)
-        {
-            if(neighbour.getDistance() == Cell.NOT_REACHED)
-            {
-                neighbour.setDistance(this.current.getDistance() + 1);
-                neighbour.setParent(this.current);
-                queue.offer(neighbour);
+        if(this.current != null) {
+            List<Cell> neighbours = this.current.getAccessibleNeighbours();
+            for (Cell neighbour : neighbours) {
+                if (neighbour.getDistance() == Cell.NOT_REACHED) {
+                    neighbour.setDistance(this.current.getDistance() + 1);
+                    neighbour.setParent(this.current);
+                    queue.offer(neighbour);
+                }
             }
         }
     }

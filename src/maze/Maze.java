@@ -8,10 +8,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class Maze {
-    protected List<Cell> grid;
-    protected int size;
-    protected int cellSize;
-    protected GraphicsContext context;
+    private List<Cell> grid;
+    private int size;
+    private int cellSize;
+    private final GraphicsContext context;
 
     public Maze(int size, int cellSize, GraphicsContext context) {
         this.size = size;
@@ -55,9 +55,10 @@ public class Maze {
     public void unSolve()
     {
         grid = grid.stream().
-                map(cell -> {cell.setDistance(Cell.NOT_REACHED);
+                peek(cell -> {cell.setDistance(Cell.NOT_REACHED);
                     cell.setDeadEnd(false);
-                    cell.setInPath(false);return cell;}).
+                    cell.setInPath(false);
+                }).
                 collect(Collectors.toList());
     }
 }
