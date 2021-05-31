@@ -59,4 +59,11 @@ public class Maze implements Serializable {
                 }).
                 collect(Collectors.toList());
     }
+
+    public void showMaze()
+    {
+        for (Cell cell : grid) {
+            cell.show();
+        }
+    }
 }
