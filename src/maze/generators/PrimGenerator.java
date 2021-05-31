@@ -1,11 +1,6 @@
 package maze.generators;
 
-import controllers.GraphicsController;
-import javafx.animation.Animation;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.util.Duration;
 import maze.Maze;
 import utils.Cell;
 
@@ -40,7 +35,7 @@ public class PrimGenerator extends MazeGenerator {
 
         this.current = frontier.get(randomNeighbourIndex);
 
-        List<Cell> newNeighbors = current.getAllVisitedNeighbours();
+        List<Cell> newNeighbors = current.getVisitedNeighbours();
 
         if (!newNeighbors.isEmpty()) {
             int randomIndex = (int) (Math.random()*100) % newNeighbors.size();

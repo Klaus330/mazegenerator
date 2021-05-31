@@ -9,25 +9,28 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Cell {
-    public int size;
-    protected int x;
-    protected int y;
-    protected int id;
-    protected GraphicsContext context;
-    protected boolean[] walls = {true, true, true, true};
-    protected boolean visited;
-    protected boolean inPath;
-    protected int distance;
-    protected Cell parent;
-
     public static final int NOT_REACHED = -1;
-
-    protected boolean isDeadEnd;
-
+    public static final int TOP_WALL = 0;
+    public static final int RIGHT_WALL = 1;
+    public static final int BOTTOM_WALL = 2;
+    public static final int LEFT_WALL = 3;
+    private final GraphicsContext context;
     protected Maze maze;
+    private int size;
+    private int x;
+    private int y;
+    private int id;
+    private boolean[] walls = {true, true, true, true};
+    private boolean visited;
+    private boolean inPath;
+    private int distance;
+    private boolean isDeadEnd;
+    private Cell parent;
 
     public Cell(int x, int y, int size, GraphicsContext context, Maze maze) {
         this.x = x;
@@ -89,136 +92,6 @@ public class Cell {
         this.y = y;
     }
 
-    public void drawWalls() {
-        int x0 = this.getX() * size;
-        int y0 = this.getY() * size;
-
-        if (walls[0]) {
-            context.setStroke(Color.BLACK);
-            context.strokeLine(x0, y0, x0 + size, y0); // top
-        }
-
-        if (walls[1]) {
-            context.setStroke(Color.BLACK);
-            context.strokeLine(x0 + size, y0, x0 + size, y0 + size); // right
-        }
-
-        if (walls[2]) {
-            context.setStroke(Color.BLACK);
-            context.strokeLine(x0 + size, y0 + size, x0, y0 + size); // bottom
-        }
-
-        if (walls[3]) {
-            context.setStroke(Color.BLACK);
-            context.strokeLine(x0, y0 + size, x0, y0); // left
-        }
-    }
-
-    public void show() {
-        int x0 = this.getX() * size;
-        int y0 = this.getY() * size;
-
-        if (this.visited) {
-            context.setFill(Color.ORANGE);
-            context.fillRect(x0, y0, size, size);
-        }
-
-        drawWalls();
-    }
-
-    public void highlight() {
-        int x0 = this.getX() * size;
-        int y0 = this.getY() * size;
-        context.setFill(Color.GREEN);
-        context.fillRect(x0, y0, size, size);
-    }
-
-    public void deadEnd() {
-        int x0 = this.getX() * size;
-        int y0 = this.getY() * size;
-        context.setFill(Color.RED);
-        context.fillRect(x0, y0, size, size);
-        drawWalls();
-    }
-
-    public void drawInPath() {
-        int x0 = this.getX() * size;
-        int y0 = this.getY() * size;
-
-        context.setFill(Color.PURPLE);
-        context.fillRect(x0, y0, size, size);
-
-        drawWalls();
-    }
-
-    public Cell getNotInPathNeighbour(List<Cell> grid) {
-        List<Cell> neighbors = new ArrayList<>();
-//        List<Pair<Integer,Integer>> coordinates = new ArrayList<>();
-
-        Cell topNeighbor = getNeighbor(neighborIndex(x, y - 1));
-        Cell rightNeighbor = getNeighbor(neighborIndex(x + 1, y));
-        Cell bottomNeighbor = getNeighbor(neighborIndex(x, y + 1));
-        Cell leftNeighbor = getNeighbor(neighborIndex(x - 1, y));
-
-        if (topNeighbor != null && !topNeighbor.isInPath()) {
-            neighbors.add(topNeighbor);
-        }
-
-        if (rightNeighbor != null && !rightNeighbor.isInPath()) {
-            neighbors.add(rightNeighbor);
-        }
-
-        if (bottomNeighbor != null && !bottomNeighbor.isInPath()) {
-            neighbors.add(bottomNeighbor);
-        }
-
-        if (leftNeighbor != null && !leftNeighbor.isInPath()) {
-            neighbors.add(leftNeighbor);
-        }
-
-        return getRandomNeighbour(neighbors);
-    }
-
-
-    public Cell getRandomNeighbour(List<Cell> neighbours) {
-        if (neighbours.size() > 0) {
-            if (neighbours.size() == 1) {
-                return neighbours.get(0);
-            } else {
-                Random random = new Random();
-                int randomIndex = random.nextInt(neighbours.size());
-                return neighbours.get(randomIndex);
-            }
-        } else {
-            return null;
-        }
-    }
-
-    public Cell checkNeighbors() {
-        List<Cell> neighbours = getUnvisitedNeighbours();
-
-        if (neighbours.size() > 0) {
-            return getRandomNeighbour(neighbours);
-        } else {
-            return null;
-        }
-    }
-
-    public Cell getNeighbor(int index) {
-        if (index == -1) {
-            return null;
-        }
-
-        return maze.getGrid().get(index);
-    }
-
-    public int neighborIndex(int i, int j) {
-        if (i < 0 || j < 0 || i > maze.getSize() - 1 || j > maze.getSize() - 1) {
-            return -1;
-        }
-        return i + (j * maze.getSize());
-    }
-
     public boolean isVisited() {
         return visited;
     }
@@ -243,30 +116,6 @@ public class Cell {
         this.walls = walls;
     }
 
-    public void removeWalls(Cell neighbor) {
-        int x = this.x - neighbor.x;
-
-
-        if (x == 1) {
-            this.walls[3] = false;
-            neighbor.walls[1] = false;
-
-        } else if (x == -1) {
-            this.walls[1] = false;
-            neighbor.walls[3] = false;
-
-        }
-
-        int y = this.y - neighbor.y;
-        if (y == 1) {
-            this.walls[0] = false;
-            neighbor.walls[2] = false;
-        } else if (y == -1) {
-            this.walls[2] = false;
-            neighbor.walls[0] = false;
-        }
-    }
-
     public int getId() {
         return id;
     }
@@ -275,33 +124,133 @@ public class Cell {
         this.id = id;
     }
 
+    public void drawWalls() {
+        int x0 = this.getX() * size;
+        int y0 = this.getY() * size;
+
+        if (walls[TOP_WALL]) {
+            context.setStroke(Color.BLACK);
+            context.strokeLine(x0, y0, x0 + size, y0);
+        }
+
+        if (walls[RIGHT_WALL]) {
+            context.setStroke(Color.BLACK);
+            context.strokeLine(x0 + size, y0, x0 + size, y0 + size);
+        }
+
+        if (walls[BOTTOM_WALL]) {
+            context.setStroke(Color.BLACK);
+            context.strokeLine(x0 + size, y0 + size, x0, y0 + size);
+        }
+
+        if (walls[LEFT_WALL]) {
+            context.setStroke(Color.BLACK);
+            context.strokeLine(x0, y0 + size, x0, y0);
+        }
+    }
+
+    public void show() {
+        if (this.visited) {
+            drawCell(Color.ORANGE);
+        }
+    }
+
+    public void highlight() {
+        drawCell(Color.GREEN);
+    }
+
+    public void deadEnd() {
+        drawCell(Color.RED);
+    }
+
+    public void drawInPath() {
+        drawCell(Color.PURPLE);
+    }
+
+    public void drawCell(Color color) {
+        int x0 = this.getX() * size;
+        int y0 = this.getY() * size;
+
+        context.setFill(color);
+        context.fillRect(x0, y0, size, size);
+
+        drawWalls();
+    }
+
+    public Cell getRandomNeighbour(List<Cell> neighbours) {
+        if (neighbours.size() > 0) {
+            if (neighbours.size() == 1) {
+                return neighbours.get(0);
+            } else {
+                Random random = new Random();
+                int randomIndex = random.nextInt(neighbours.size());
+                return neighbours.get(randomIndex);
+            }
+        } else {
+            return null;
+        }
+    }
+
+    public int neighborIndex(int i, int j) {
+        if (i < 0 || j < 0 || i > maze.getSize() - 1 || j > maze.getSize() - 1) {
+            return -1;
+        }
+        return i + (j * maze.getSize());
+    }
+
+    public Cell getNeighbor(int index) {
+        if (index == -1) {
+            return null;
+        }
+        return maze.getGrid().get(index);
+    }
+
+    public Cell getNotInPathNeighbour(List<Cell> grid) {
+        List<Cell> neighbours = getAllNeighbours();
+        neighbours = neighbours.stream().filter(Predicate.not(Cell::isInPath)).collect(Collectors.toList());
+
+        return getRandomNeighbour(neighbours);
+    }
+
+    public Cell checkNeighbors() {
+        List<Cell> neighbours = getUnvisitedNeighbours();
+
+        if (neighbours.size() > 0) {
+            return getRandomNeighbour(neighbours);
+        } else {
+            return null;
+        }
+    }
+
+    public void removeWalls(Cell neighbour) {
+        int x = this.x - neighbour.getX();
+
+        if (x == 1) {
+            this.walls[LEFT_WALL] = false;
+            neighbour.walls[RIGHT_WALL] = false;
+
+        } else if (x == -1) {
+            this.walls[RIGHT_WALL] = false;
+            neighbour.walls[LEFT_WALL] = false;
+        }
+
+        int y = this.y - neighbour.getY();
+        if (y == 1) {
+            this.walls[TOP_WALL] = false;
+            neighbour.walls[BOTTOM_WALL] = false;
+        } else if (y == -1) {
+            this.walls[BOTTOM_WALL] = false;
+            neighbour.walls[TOP_WALL] = false;
+        }
+    }
+
     public List<Cell> getUnvisitedNeighbours() {
-        List<Cell> neighbors = new ArrayList<>();
+        List<Cell> neighbours = getAllNeighbours();
+        neighbours.removeAll(getVisitedNeighbours());
 
-        Cell topNeighbor = getNeighbor(neighborIndex(x, y - 1));
-        Cell rightNeighbor = getNeighbor(neighborIndex(x + 1, y));
-        Cell bottomNeighbor = getNeighbor(neighborIndex(x, y + 1));
-        Cell leftNeighbor = getNeighbor(neighborIndex(x - 1, y));
+        Collections.shuffle(neighbours);
 
-        if (topNeighbor != null && !topNeighbor.visited) {
-            neighbors.add(topNeighbor);
-        }
-
-        if (rightNeighbor != null && !rightNeighbor.visited) {
-            neighbors.add(rightNeighbor);
-        }
-
-        if (bottomNeighbor != null && !bottomNeighbor.visited) {
-            neighbors.add(bottomNeighbor);
-        }
-
-        if (leftNeighbor != null && !leftNeighbor.visited) {
-            neighbors.add(leftNeighbor);
-        }
-
-        Collections.shuffle(neighbors);
-
-        return neighbors;
+        return neighbours;
     }
 
     public List<Cell> getAllNeighbours() {
@@ -320,57 +269,18 @@ public class Cell {
         return neighbors;
     }
 
+    public List<Cell> getVisitedNeighbours() {
+        List<Cell> neighbours = getAllNeighbours();
+        neighbours = neighbours.stream().filter(Cell::isVisited).collect(Collectors.toList());
 
-    public List<Cell> getAllVisitedNeighbours() {
-        List<Cell> allVisitedNeighbours = new ArrayList<>();
-
-        Cell topNeighbor = getNeighbor(neighborIndex(x, y - 1));
-        Cell rightNeighbor = getNeighbor(neighborIndex(x + 1, y));
-        Cell bottomNeighbor = getNeighbor(neighborIndex(x, y + 1));
-        Cell leftNeighbor = getNeighbor(neighborIndex(x - 1, y));
-
-        if (topNeighbor != null && topNeighbor.visited) {
-            allVisitedNeighbours.add(topNeighbor);
-        }
-
-        if (rightNeighbor != null && rightNeighbor.visited) {
-            allVisitedNeighbours.add(rightNeighbor);
-        }
-
-        if (bottomNeighbor != null && bottomNeighbor.visited) {
-            allVisitedNeighbours.add(bottomNeighbor);
-        }
-
-        if (leftNeighbor != null && leftNeighbor.visited) {
-            allVisitedNeighbours.add(leftNeighbor);
-        }
-
-
-        return allVisitedNeighbours;
+        return neighbours;
     }
 
     public Cell getPathNeighbour() {
-        List<Cell> neighbors = new ArrayList<>();
+        List<Cell> neighbours = getAccessibleNeighbours();
+        neighbours = neighbours.stream().filter(Predicate.not(Cell::isDeadEnd)).collect(Collectors.toList());
 
-        Cell topNeighbor = getNeighbor(neighborIndex(x, y - 1));
-        Cell rightNeighbor = getNeighbor(neighborIndex(x + 1, y));
-        Cell bottomNeighbor = getNeighbor(neighborIndex(x, y + 1));
-        Cell leftNeighbor = getNeighbor(neighborIndex(x - 1, y));
-
-        if (topNeighbor != null && !topNeighbor.isDeadEnd() && !this.walls[0]) {
-            neighbors.add(topNeighbor);
-        }
-        if (rightNeighbor != null && !rightNeighbor.isDeadEnd() && !this.walls[1]) {
-            neighbors.add(rightNeighbor);
-        }
-        if (bottomNeighbor != null && !bottomNeighbor.isDeadEnd() && !this.walls[2]) {
-            neighbors.add(bottomNeighbor);
-        }
-        if (leftNeighbor != null && !leftNeighbor.isDeadEnd() && !this.walls[3]) {
-            neighbors.add(leftNeighbor);
-        }
-
-        return getRandomNeighbour(neighbors);
+        return getRandomNeighbour(neighbours);
     }
 
     public List<Cell> getAccessibleNeighbours() {
@@ -381,16 +291,16 @@ public class Cell {
         Cell bottomNeighbor = getNeighbor(neighborIndex(x, y + 1));
         Cell leftNeighbor = getNeighbor(neighborIndex(x - 1, y));
 
-        if (topNeighbor != null &&!this.walls[0]) {
+        if (topNeighbor != null && !this.walls[TOP_WALL]) {
             neighbors.add(topNeighbor);
         }
-        if (rightNeighbor != null && !this.walls[1]) {
+        if (rightNeighbor != null && !this.walls[RIGHT_WALL]) {
             neighbors.add(rightNeighbor);
         }
-        if (bottomNeighbor != null && !this.walls[2]) {
+        if (bottomNeighbor != null && !this.walls[BOTTOM_WALL]) {
             neighbors.add(bottomNeighbor);
         }
-        if (leftNeighbor != null && !this.walls[3]) {
+        if (leftNeighbor != null && !this.walls[LEFT_WALL]) {
             neighbors.add(leftNeighbor);
         }
 
