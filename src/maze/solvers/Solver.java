@@ -83,6 +83,10 @@ public abstract class Solver {
         GraphicsController.timeline.play();
     }
 
+    protected boolean solutionFound() {
+        return this.current.equals(grid.get(grid.size() - 1));
+    }
+
     public void setPause(double pause)
     {
         this.drawPause = pause;

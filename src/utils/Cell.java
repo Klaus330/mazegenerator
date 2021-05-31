@@ -2,12 +2,14 @@ package utils;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import javafx.util.Pair;
 import maze.Maze;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Stream;
 
 public class Cell {
     public int size;
@@ -19,6 +21,10 @@ public class Cell {
     protected boolean visited;
     protected boolean inPath;
     protected boolean inPathSolve;
+    protected int distance;
+    protected Cell parent;
+
+    public static final int NOT_REACHED = -1;
 
     protected boolean isDeadEnd;
 
@@ -34,8 +40,24 @@ public class Cell {
         this.inPath = false;
         this.inPathSolve = false;
         this.isDeadEnd = false;
+        this.distance = NOT_REACHED;
     }
 
+    public int getDistance() {
+        return distance;
+    }
+
+    public void setDistance(int distance) {
+        this.distance = distance;
+    }
+
+    public Cell getParent() {
+        return parent;
+    }
+
+    public void setParent(Cell parent) {
+        this.parent = parent;
+    }
 
     public boolean isDeadEnd() {
         return isDeadEnd;
@@ -141,6 +163,7 @@ public class Cell {
 
     public Cell getNotInPathNeighbour(List<Cell> grid) {
         List<Cell> neighbors = new ArrayList<>();
+//        List<Pair<Integer,Integer>> coordinates = new ArrayList<>();
 
         Cell topNeighbor = getNeighbor(neighborIndex(x, y - 1));
         Cell rightNeighbor = getNeighbor(neighborIndex(x + 1, y));
@@ -358,5 +381,29 @@ public class Cell {
         }
 
         return getRandomNeighbour(neighbors);
+    }
+
+    public List<Cell> getAccessibleNeighbours() {
+        List<Cell> neighbors = new ArrayList<>();
+
+        Cell topNeighbor = getNeighbor(neighborIndex(x, y - 1));
+        Cell rightNeighbor = getNeighbor(neighborIndex(x + 1, y));
+        Cell bottomNeighbor = getNeighbor(neighborIndex(x, y + 1));
+        Cell leftNeighbor = getNeighbor(neighborIndex(x - 1, y));
+
+        if (topNeighbor != null &&!this.walls[0]) {
+            neighbors.add(topNeighbor);
+        }
+        if (rightNeighbor != null && !this.walls[1]) {
+            neighbors.add(rightNeighbor);
+        }
+        if (bottomNeighbor != null && !this.walls[2]) {
+            neighbors.add(bottomNeighbor);
+        }
+        if (leftNeighbor != null && !this.walls[3]) {
+            neighbors.add(leftNeighbor);
+        }
+
+        return neighbors;
     }
 }

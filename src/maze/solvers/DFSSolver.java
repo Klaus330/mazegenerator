@@ -13,7 +13,7 @@ public class DFSSolver extends Solver {
         setup();
 
         this.current = grid.get(0);
-        while (!this.current.equals(grid.get(grid.size()-1))) {
+        while (!solutionFound()) {
             path();
         }
         stack.push(grid.get(grid.size()-1));
@@ -21,7 +21,7 @@ public class DFSSolver extends Solver {
         play();
     }
 
-    public void path() {
+    private void path() {
         this.current.setDeadEnd(true);
         addKeyFrame(deadEndFrame(this.current));
 
