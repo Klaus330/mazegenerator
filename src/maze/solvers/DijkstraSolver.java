@@ -28,6 +28,7 @@ public class DijkstraSolver extends Solver{
         {
             path();
         }
+
         getSolution();
         play();
     }

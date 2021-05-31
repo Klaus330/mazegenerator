@@ -5,6 +5,7 @@ import utils.Cell;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Maze {
     protected List<Cell> grid;
@@ -49,5 +50,14 @@ public class Maze {
                 grid.add(new Cell(i, j, cellSize, context, this));
             }
         }
+    }
+
+    public void unSolve()
+    {
+        grid = grid.stream().
+                map(cell -> {cell.setDistance(Cell.NOT_REACHED);
+                    cell.setDeadEnd(false);
+                    cell.setInPath(false);return cell;}).
+                collect(Collectors.toList());
     }
 }

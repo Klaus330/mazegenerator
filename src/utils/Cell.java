@@ -20,7 +20,6 @@ public class Cell {
     protected boolean[] walls = {true, true, true, true};
     protected boolean visited;
     protected boolean inPath;
-    protected boolean inPathSolve;
     protected int distance;
     protected Cell parent;
 
@@ -38,7 +37,6 @@ public class Cell {
         this.maze = maze;
         this.visited = false;
         this.inPath = false;
-        this.inPathSolve = false;
         this.isDeadEnd = false;
         this.distance = NOT_REACHED;
     }
@@ -81,14 +79,6 @@ public class Cell {
 
     public void setInPath(boolean inPath) {
         this.inPath = inPath;
-    }
-
-    public boolean isInPathSolve() {
-        return inPathSolve;
-    }
-
-    public void setInPathSolve(boolean inPathSolve) {
-        this.inPathSolve = inPathSolve;
     }
 
     public int getY() {

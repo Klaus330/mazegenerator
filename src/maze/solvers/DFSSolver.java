@@ -43,7 +43,7 @@ public class DFSSolver extends Solver {
         while (!stack.isEmpty()) {
             try {
                 Cell solutionCell = stack.pop();
-                solutionCell.setInPathSolve(true);
+                solutionCell.setInPath(true);
                 addKeyFrame(inPathFrame(solutionCell));
             } catch (Exception ignore) {
             }

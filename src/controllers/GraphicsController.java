@@ -21,6 +21,7 @@ import maze.generators.*;
 import maze.solvers.DFSSolver;
 import maze.solvers.DijkstraSolver;
 import maze.solvers.Solver;
+import utils.Cell;
 
 import javax.imageio.ImageIO;
 import java.io.File;
@@ -50,6 +51,9 @@ public class GraphicsController implements Initializable {
     @FXML
     private ChoiceBox<String> solveChoice;
 
+    @FXML
+    private Button resetButton;
+
     static public Maze maze;
     static public boolean isSolving = false;
     static public boolean isSolved = false;
@@ -58,7 +62,7 @@ public class GraphicsController implements Initializable {
 
     private Solver solver;
 
-    private double basicPause = 0.5;
+    private final double basicPause = 0.5;
     private GraphicsContext graphicsContext;
 
     public static Timeline timeline;
@@ -131,6 +135,17 @@ public class GraphicsController implements Initializable {
             isSolved = false;
             solver.solve();
         }
+    }
+
+    @FXML
+    private void resetSolver()
+    {
+        maze.unSolve();
+        for(Cell cell: maze.getGrid())
+        {
+            cell.show();
+        }
+        isSolved = false;
     }
 
     @FXML
