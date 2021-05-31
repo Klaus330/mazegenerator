@@ -7,8 +7,8 @@ import utils.Cell;
 
 public class DFSGenerator extends MazeGenerator {
 
-    public DFSGenerator(Maze maze, GraphicsContext context) {
-        super(maze, context);
+    public DFSGenerator(Maze maze) {
+        super(maze);
     }
 
     @Override

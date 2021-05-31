@@ -12,8 +12,8 @@ public class PrimGenerator extends MazeGenerator {
     private final List<Cell> boundaries = new ArrayList<>();
     private final Random randomChoice;
 
-    public PrimGenerator(Maze maze, GraphicsContext graphicsContext) {
-        super(maze, graphicsContext);
+    public PrimGenerator(Maze maze) {
+        super(maze);
         randomChoice = new Random();
     }
     @Override

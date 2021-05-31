@@ -9,9 +9,9 @@ import java.util.Collections;
 import java.util.List;
 
 public class KruskalGenerator extends MazeGenerator{
-    public KruskalGenerator(Maze maze, GraphicsContext graphicsContext)
+    public KruskalGenerator(Maze maze)
     {
-        super(maze, graphicsContext);
+        super(maze);
     }
     private final DisjointSet disjointSet = new DisjointSet();
 

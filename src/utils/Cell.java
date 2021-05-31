@@ -1,25 +1,23 @@
 package utils;
 
-import javafx.scene.canvas.GraphicsContext;
+import controllers.GraphicsController;
 import javafx.scene.paint.Color;
-import javafx.util.Pair;
 import maze.Maze;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-public class Cell {
+public class Cell implements Serializable {
     public static final int NOT_REACHED = -1;
     public static final int TOP_WALL = 0;
     public static final int RIGHT_WALL = 1;
     public static final int BOTTOM_WALL = 2;
     public static final int LEFT_WALL = 3;
-    private final GraphicsContext context;
     protected Maze maze;
     private int size;
     private int x;
@@ -32,11 +30,10 @@ public class Cell {
     private boolean isDeadEnd;
     private Cell parent;
 
-    public Cell(int x, int y, int size, GraphicsContext context, Maze maze) {
+    public Cell(int x, int y, int size, Maze maze) {
         this.x = x;
         this.y = y;
         this.size = size;
-        this.context = context;
         this.maze = maze;
         this.visited = false;
         this.inPath = false;
@@ -129,23 +126,23 @@ public class Cell {
         int y0 = this.getY() * size;
 
         if (walls[TOP_WALL]) {
-            context.setStroke(Color.BLACK);
-            context.strokeLine(x0, y0, x0 + size, y0);
+            GraphicsController.graphicsContext.setStroke(Color.BLACK);
+            GraphicsController.graphicsContext.strokeLine(x0, y0, x0 + size, y0);
         }
 
         if (walls[RIGHT_WALL]) {
-            context.setStroke(Color.BLACK);
-            context.strokeLine(x0 + size, y0, x0 + size, y0 + size);
+            GraphicsController.graphicsContext.setStroke(Color.BLACK);
+            GraphicsController.graphicsContext.strokeLine(x0 + size, y0, x0 + size, y0 + size);
         }
 
         if (walls[BOTTOM_WALL]) {
-            context.setStroke(Color.BLACK);
-            context.strokeLine(x0 + size, y0 + size, x0, y0 + size);
+            GraphicsController.graphicsContext.setStroke(Color.BLACK);
+            GraphicsController.graphicsContext.strokeLine(x0 + size, y0 + size, x0, y0 + size);
         }
 
         if (walls[LEFT_WALL]) {
-            context.setStroke(Color.BLACK);
-            context.strokeLine(x0, y0 + size, x0, y0);
+            GraphicsController.graphicsContext.setStroke(Color.BLACK);
+            GraphicsController.graphicsContext.strokeLine(x0, y0 + size, x0, y0);
         }
     }
 
@@ -171,8 +168,8 @@ public class Cell {
         int x0 = this.getX() * size;
         int y0 = this.getY() * size;
 
-        context.setFill(color);
-        context.fillRect(x0, y0, size, size);
+        GraphicsController.graphicsContext.setFill(color);
+        GraphicsController.graphicsContext.fillRect(x0, y0, size, size);
 
         drawWalls();
     }

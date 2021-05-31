@@ -13,8 +13,8 @@ public class WilsonGenerator extends MazeGenerator {
     private Random randomChoice;
     private final List<Cell>cellsInPath = new ArrayList<>();
     
-    public WilsonGenerator(Maze maze, GraphicsContext graphicsContext) {
-        super(maze, graphicsContext);
+    public WilsonGenerator(Maze maze) {
+        super(maze);
     }
 
     @Override

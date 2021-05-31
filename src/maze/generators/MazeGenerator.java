@@ -15,13 +15,11 @@ import java.util.Stack;
 public abstract class MazeGenerator extends Drawable {
     protected Maze maze;
     protected Cell current;
-    protected GraphicsContext context;
     protected Stack<Cell> stack;
     protected List<Cell> grid;
 
-    public MazeGenerator(Maze maze, GraphicsContext context) {
+    public MazeGenerator(Maze maze) {
         this.maze = maze;
-        this.context = context;
         maze.initCells();
         this.current = maze.getGrid().get(0);
         this.grid = maze.getGrid();
@@ -35,9 +33,9 @@ public abstract class MazeGenerator extends Drawable {
 
     public void play()
     {
-        this.context.clearRect(0,0,800,800);
-        this.context.setFill(Color.rgb(204,204,204));
-        this.context.fillRect(0,0,800,800);
+        GraphicsController.graphicsContext.clearRect(0,0,800,800);
+        GraphicsController.graphicsContext.setFill(Color.rgb(204,204,204));
+        GraphicsController.graphicsContext.fillRect(0,0,800,800);
 
         timePoint = timePoint.add(Duration.ZERO);
         GraphicsController.timeline.getKeyFrames().add(new KeyFrame(timePoint, e -> GraphicsController.isGenerated = true));

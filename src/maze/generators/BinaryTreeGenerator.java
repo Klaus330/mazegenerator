@@ -11,8 +11,8 @@ public class BinaryTreeGenerator extends MazeGenerator{
     private final Random randomChoice;
     private int index;
 
-    public BinaryTreeGenerator(Maze maze, GraphicsContext context) {
-        super(maze, context);
+    public BinaryTreeGenerator(Maze maze) {
+        super(maze);
         randomChoice = new Random();
     }
 

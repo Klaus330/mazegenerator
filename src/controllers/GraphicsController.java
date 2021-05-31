@@ -63,7 +63,7 @@ public class GraphicsController implements Initializable {
     private Solver solver;
 
     private static final double BASIC_PAUSE = 0.5;
-    private GraphicsContext graphicsContext;
+    public static GraphicsContext graphicsContext;
 
     public static Timeline timeline;
 
@@ -104,13 +104,13 @@ public class GraphicsController implements Initializable {
     private void generateMaze()
     {
         int mazeSize = calculateMazeSize();
-        maze = new Maze(mazeSize, (int)mazeCanvas.getWidth()/mazeSize, graphicsContext);
+        maze = new Maze(mazeSize, (int)mazeCanvas.getWidth()/mazeSize);
         MazeGenerator mazeGenerator = switch (algorithmChoice.getValue()) {
-            case "DFS" -> new DFSGenerator(maze, graphicsContext);
-            case "Prim" -> new PrimGenerator(maze, graphicsContext);
-            case "Kruskal" -> new KruskalGenerator(maze, graphicsContext);
-            case "Wilson" -> new WilsonGenerator(maze, graphicsContext);
-            case "BinaryTree" -> new BinaryTreeGenerator(maze, graphicsContext);
+            case "DFS" -> new DFSGenerator(maze);
+            case "Prim" -> new PrimGenerator(maze);
+            case "Kruskal" -> new KruskalGenerator(maze);
+            case "Wilson" -> new WilsonGenerator(maze);
+            case "BinaryTree" -> new BinaryTreeGenerator(maze);
             default -> throw new IllegalStateException("Unexpected value: " + algorithmChoice.getValue());
         };
         mazeGenerator.setPause(BASIC_PAUSE /speedSlider.getValue());
