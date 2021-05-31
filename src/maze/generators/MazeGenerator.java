@@ -2,7 +2,6 @@ package maze.generators;
 
 import controllers.GraphicsController;
 import javafx.animation.KeyFrame;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import maze.Maze;

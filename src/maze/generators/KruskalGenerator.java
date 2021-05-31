@@ -1,9 +1,8 @@
 package maze.generators;
 
-import javafx.scene.canvas.GraphicsContext;
-import utils.DisjointSet;
 import maze.Maze;
 import utils.Cell;
+import utils.DisjointSet;
 
 import java.util.Collections;
 import java.util.List;

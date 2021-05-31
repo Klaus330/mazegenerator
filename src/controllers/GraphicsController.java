@@ -148,13 +148,14 @@ public class GraphicsController implements Initializable {
         fileChooser.getExtensionFilters().add(extensionFilter);
 
         File toSaveFile = fileChooser.showSaveDialog(new Stage());
-
-        try {
-            if (toSaveFile != null) {
-                ImageIO.write(SwingFXUtils.fromFXImage(screenshot, null), "png", toSaveFile);
+        if(toSaveFile != null) {
+            try {
+                if (toSaveFile != null) {
+                    ImageIO.write(SwingFXUtils.fromFXImage(screenshot, null), "png", toSaveFile);
+                }
+            } catch (IOException exception) {
+                exception.printStackTrace();
             }
-        } catch (IOException exception) {
-            exception.printStackTrace();
         }
     }
 
@@ -165,14 +166,15 @@ public class GraphicsController implements Initializable {
         fileChooser.getExtensionFilters().add(extensionFilter);
 
         File toSaveFile = fileChooser.showSaveDialog(new Stage());
-
-        try (FileOutputStream saveFileStream = new FileOutputStream(toSaveFile);
-             ObjectOutputStream outStream = new ObjectOutputStream(saveFileStream)) {
-            maze.unSolve();
-            outStream.writeObject(maze);
-            outStream.flush();
-        } catch (IOException exception) {
-            exception.printStackTrace();
+        if(toSaveFile != null) {
+            try (FileOutputStream saveFileStream = new FileOutputStream(toSaveFile);
+                 ObjectOutputStream outStream = new ObjectOutputStream(saveFileStream)) {
+                maze.unSolve();
+                outStream.writeObject(maze);
+                outStream.flush();
+            } catch (IOException exception) {
+                exception.printStackTrace();
+            }
         }
     }
 
@@ -183,21 +185,22 @@ public class GraphicsController implements Initializable {
         fileChooser.getExtensionFilters().add(extensionFilter);
 
         File toLoadFile = fileChooser.showOpenDialog(new Stage());
+        if(toLoadFile != null) {
+            try (FileInputStream loadFileStream = new FileInputStream(toLoadFile);
+                 ObjectInputStream inStream = new ObjectInputStream(loadFileStream)) {
 
-        try (FileInputStream loadFileStream = new FileInputStream(toLoadFile);
-             ObjectInputStream inStream = new ObjectInputStream(loadFileStream)) {
+                maze = (Maze) inStream.readObject();
+                maze.showMaze();
+                isSolved = false;
+                isGenerated = true;
 
-            maze = (Maze) inStream.readObject();
-            maze.showMaze();
-            isSolved = false;
-            isGenerated = true;
-
-        } catch (ClassNotFoundException classException) {
-            System.err.println("Can't load the catalog class!");
-            classException.printStackTrace();
-        } catch (IOException ioException) {
-            System.err.println("Can't read from the file!");
-            ioException.printStackTrace();
+            } catch (ClassNotFoundException classException) {
+                System.err.println("Can't load the catalog class!");
+                classException.printStackTrace();
+            } catch (IOException ioException) {
+                System.err.println("Can't read from the file!");
+                ioException.printStackTrace();
+            }
         }
     }
 }

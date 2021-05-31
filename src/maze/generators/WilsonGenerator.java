@@ -1,6 +1,4 @@
 package maze.generators;
-
-import javafx.scene.canvas.GraphicsContext;
 import maze.Maze;
 import utils.Cell;
 
