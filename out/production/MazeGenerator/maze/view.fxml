@@ -5,15 +5,28 @@
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Slider?>
+<?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="800.0" maxWidth="800.0" minHeight="800.0" minWidth="800.0" prefHeight="800.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.GraphicsController">
+<BorderPane maxHeight="800.0" maxWidth="800.0" minHeight="800.0" minWidth="800.0" prefHeight="800.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.GraphicsController">
    <top>
       <Pane prefHeight="58.0" prefWidth="800.0" BorderPane.alignment="CENTER">
          <children>
-            <Label layoutX="349.0" layoutY="14.0" prefHeight="17.0" prefWidth="89.0" text="Maze Generator" textAlignment="CENTER" />
+            <Label layoutX="309.0" layoutY="12.0" prefHeight="35.0" prefWidth="183.0" styleClass="title" text="Maze Generator">
+               <font>
+                  <Font name="SansSerif Bold" size="24.0" />
+               </font>
+               <effect>
+                  <DropShadow height="8.9" offsetX="2.0" offsetY="2.0" radius="6.172499999999999" spread="0.11" width="17.79">
+                     <color>
+                        <Color opacity="0.2347826063632965" />
+                     </color>
+                  </DropShadow>
+               </effect></Label>
          </children></Pane>
    </top>
    <center>

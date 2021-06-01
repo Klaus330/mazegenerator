@@ -36,6 +36,7 @@ public class GraphicsController implements Initializable {
     static public boolean isGenerated = false;
     public static GraphicsContext graphicsContext;
     public static Timeline timeline;
+
     @FXML
     private Canvas mazeCanvas;
     @FXML
@@ -56,6 +57,7 @@ public class GraphicsController implements Initializable {
     private ChoiceBox<String> solveChoice;
     @FXML
     private Button resetButton;
+
     private Solver solver;
 
     @Override
@@ -89,7 +91,7 @@ public class GraphicsController implements Initializable {
 
     @FXML
     private void generateMaze() {
-        if(!isSolving) {
+        if (!isSolving) {
             int mazeSize = calculateMazeSize();
             maze = new Maze(mazeSize, (int) mazeCanvas.getWidth() / mazeSize);
             MazeGenerator mazeGenerator = switch (algorithmChoice.getValue()) {
@@ -128,8 +130,7 @@ public class GraphicsController implements Initializable {
     @FXML
     private void resetSolver() {
         if (maze != null && !isGenerating) {
-            if(timeline != null && isSolving)
-            {
+            if (timeline != null && isSolving) {
                 timeline.stop();
                 isSolving = false;
             }
@@ -148,11 +149,9 @@ public class GraphicsController implements Initializable {
         fileChooser.getExtensionFilters().add(extensionFilter);
 
         File toSaveFile = fileChooser.showSaveDialog(new Stage());
-        if(toSaveFile != null) {
+        if (toSaveFile != null) {
             try {
-                if (toSaveFile != null) {
-                    ImageIO.write(SwingFXUtils.fromFXImage(screenshot, null), "png", toSaveFile);
-                }
+                ImageIO.write(SwingFXUtils.fromFXImage(screenshot, null), "png", toSaveFile);
             } catch (IOException exception) {
                 exception.printStackTrace();
             }
@@ -166,7 +165,7 @@ public class GraphicsController implements Initializable {
         fileChooser.getExtensionFilters().add(extensionFilter);
 
         File toSaveFile = fileChooser.showSaveDialog(new Stage());
-        if(toSaveFile != null) {
+        if (toSaveFile != null && maze != null) {
             try (FileOutputStream saveFileStream = new FileOutputStream(toSaveFile);
                  ObjectOutputStream outStream = new ObjectOutputStream(saveFileStream)) {
                 maze.unSolve();
@@ -185,7 +184,7 @@ public class GraphicsController implements Initializable {
         fileChooser.getExtensionFilters().add(extensionFilter);
 
         File toLoadFile = fileChooser.showOpenDialog(new Stage());
-        if(toLoadFile != null) {
+        if (toLoadFile != null) {
             try (FileInputStream loadFileStream = new FileInputStream(toLoadFile);
                  ObjectInputStream inStream = new ObjectInputStream(loadFileStream)) {
 
