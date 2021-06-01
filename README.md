@@ -11,7 +11,7 @@ Maze Generator
 ---
 ## Technologies used
 1.  Java FX - Interfata grafica pentru asistarea procesului de generare
-2.  Collections - Folosirea implementarilor necesare pentru algoritmi care necesitau una din aceste structuri de date (Stiva, Coada)
+2.  Collections - Folosirea implementarilor necesare pentru algoritmii care necesitau una din aceste structuri de date (Stiva, Coada)
 3.  Streams - eficientizarea operatiilor de filtrare a vecinilor
 ---
 ## Maze Creation Algorithms
