@@ -24,7 +24,7 @@ Maze Generator
             1. Daca celula curenta are vecini nevizitati:
                 1. Alege unul dintre vecini
                 2. Sterge peretele dintre celula curenta si celula aleasa
-                3. Adauga celula curenta in stiva?
+                3. Adauga celula curenta in stiva
                 4. Invoca rutina recursiv pentru celula nou aleasa
             2. Altfel:
                 1. Extrage o celula din stiva, daca stiva nu este goala
